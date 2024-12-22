@@ -7,9 +7,9 @@ export const UniversityPopup = ({ setIsOpen }) => {
   const [image, setImage] = useState(null);
   const [icon, setIcon] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [isActive , setIsActive ] = useState(false);
   const [iconPreview, setIconPreview] = useState(null);
   const [step, setStep] = useState(1);
+  const [modules, setModules] = useState([]);
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -24,24 +24,38 @@ export const UniversityPopup = ({ setIsOpen }) => {
     }
   };
 
-const handleNext = () => {
-  if (step < 3) {
+  const handleNext = () => {
+    // if (!name || !image || !icon) {
+    //   alert("Please fill all the required fields");
+    //   return;
+    // }
     setStep(step + 1);
-  } else {
-    // Handle final step submission
-    console.log("Submitting:", { name, image, icon });
+  };
+
+  const handleSubmit = () => {
+    // Validate if modules data exists
+    // if (modules.length === 0) {
+    //   alert("Please add at least one module");
+    //   return;
+    // }
+
+    // Create final form data
+    const formData = {
+      university: {
+        name,
+        image,
+        icon,
+      },
+      modules,
+    };
+
+    console.log("Submitting complete form:", formData);
     setIsOpen(false);
-  }
-};
-const handleBack = () => {
-  if (step > 1) {
-    setStep(step - 1);
-  }
-};
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex  z-[99999] items-center justify-center">
-      <div className="bg-white rounded-lg p-10 w-1/2  relative">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex z-[99999] items-center justify-center">
+      <div className="bg-white rounded-lg p-10 w-3/4 h-[35rem]  relative">
         <button
           onClick={() => setIsOpen(false)}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -62,7 +76,9 @@ const handleBack = () => {
           </svg>
         </button>
 
-        <h2 className="text-xl font-bold font-mono mb-4">Enter Details</h2>
+        <h2 className="text-xl font-bold font-mono mb-4">
+          {step === 1 ? "University Details" : "Add Modules"}
+        </h2>
 
         {step === 1 ? (
           <>
@@ -83,6 +99,7 @@ const handleBack = () => {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter university name"
                     className="block min-w-0 grow px-3 py-1.5 text-base text-gray-900 placeholder:text-xs placeholder:text-gray-300 focus:outline focus:outline-0 sm:text-sm/6"
+                    required
                   />
                 </div>
               </div>
@@ -101,6 +118,7 @@ const handleBack = () => {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
 
@@ -117,6 +135,7 @@ const handleBack = () => {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
 
@@ -139,13 +158,16 @@ const handleBack = () => {
               </div>
             )}
           </>
-        ) : step === 2 ? (
-          <ModulesPopup setStep={setStep} step={step} setIsOpen={setIsOpen} />
         ) : (
-          <ChaptersPopup setStep={setStep} step={step} setIsOpen={setIsOpen} />
+          <ModulesPopup
+            setStep={setStep}
+            step={step}
+            modules={modules}
+            setModules={setModules}
+          />
         )}
 
-        <div className="flex justify-center mb-4">
+        {/* <div className="flex justify-center mb-4">
           <div
             className={`w-3 h-3 rounded-full mx-1 ${
               step >= 1 ? "bg-blue-500" : "bg-gray-300"
@@ -156,33 +178,37 @@ const handleBack = () => {
               step >= 2 ? "bg-blue-500" : "bg-gray-300"
             }`}
           ></div>
-          <div
-            className={`w-3 h-3 rounded-full mx-1 ${
-              step >= 3 ? "bg-blue-500" : "bg-gray-300"
-            }`}
-          ></div>
-        </div>
+        </div> */}
 
-        <button
-          onClick={handleNext}
-          className="absolute bottom-4 text-sm right-4 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center"
-        >
-          {step === 1 ? "Next" : "Submit"}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 ml-2"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+        <div className="absolute bottom-4 right-4 flex gap-2">
+          {step === 2 && (
+            <button
+              onClick={() => setStep(1)}
+              className="px-3 py-1 text-sm text-blue-500 hover:text-blue-700"
+            >
+              Back
+            </button>
+          )}
+          <button
+            onClick={step === 1 ? handleNext : handleSubmit}
+            className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center"
           >
-            <path
-              fillRule="evenodd"
-              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
+            {step === 1 ? "Next" : "Submit"}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 ml-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-      {/* {isActive && <ModulesPopup setIsActive={setIsActive} />} */}
     </div>
   );
 };
