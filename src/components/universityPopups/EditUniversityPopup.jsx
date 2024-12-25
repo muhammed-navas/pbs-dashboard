@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ModulesPopup } from "./ModulesPopup";
-import { ChaptersPopup } from "./ChaptersPopup";
 
-export const UniversityPopup = ({ setIsOpen }) => {
+export const EditUniversityPopup = ({ setIsOpen, university }) => {
   const [name, setName] = useState("");
   const [image, setImage] = useState(null);
   const [icon, setIcon] = useState(null);
@@ -10,6 +9,15 @@ export const UniversityPopup = ({ setIsOpen }) => {
   const [iconPreview, setIconPreview] = useState(null);
   const [step, setStep] = useState(1);
   const [modules, setModules] = useState([]);
+
+  useEffect(() => {
+    if (university) {
+      setName(university.name);
+      setImagePreview(university.img);
+      setIconPreview(university.icon);
+      setModules(university.modules);
+    }
+  }, [university]);
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -25,37 +33,26 @@ export const UniversityPopup = ({ setIsOpen }) => {
   };
 
   const handleNext = () => {
-    // if (!name || !image || !icon) {
-    //   alert("Please fill all the required fields");
-    //   return;
-    // }
     setStep(step + 1);
   };
 
   const handleSubmit = () => {
-    // Validate if modules data exists
-    // if (modules.length === 0) {
-    //   alert("Please add at least one module");
-    //   return;
-    // }
-
-    // Create final form data
     const formData = {
       university: {
         name,
-        image,
-        icon,
+        image: image || university.img,
+        icon: icon || university.icon,
       },
       modules,
     };
 
-    console.log("Submitting complete form:", formData);
+    console.log("Submitting updated form:", formData);
     setIsOpen(false);
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex z-[99999] items-center justify-center">
-      <div className="bg-white rounded-lg p-10 w-3/4 h-[35rem]  relative">
+      <div className="bg-white rounded-lg p-10 w-3/4 h-[35rem] relative">
         <button
           onClick={() => setIsOpen(false)}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -77,7 +74,7 @@ export const UniversityPopup = ({ setIsOpen }) => {
         </button>
 
         <h2 className="text-xl font-bold font-mono mb-4">
-          {step === 1 ? "University Details" : "Add Modules"}
+          {step === 1 ? "Edit University Details" : "Edit Modules"}
         </h2>
 
         {step === 1 ? (
@@ -118,7 +115,6 @@ export const UniversityPopup = ({ setIsOpen }) => {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                required
               />
             </div>
 
@@ -135,7 +131,6 @@ export const UniversityPopup = ({ setIsOpen }) => {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                required
               />
             </div>
 
@@ -167,19 +162,6 @@ export const UniversityPopup = ({ setIsOpen }) => {
           />
         )}
 
-        {/* <div className="flex justify-center mb-4">
-          <div
-            className={`w-3 h-3 rounded-full mx-1 ${
-              step >= 1 ? "bg-blue-500" : "bg-gray-300"
-            }`}
-          ></div>
-          <div
-            className={`w-3 h-3 rounded-full mx-1 ${
-              step >= 2 ? "bg-blue-500" : "bg-gray-300"
-            }`}
-          ></div>
-        </div> */}
-
         <div className="absolute bottom-4 right-4 flex gap-2">
           {step === 2 && (
             <button
@@ -193,7 +175,7 @@ export const UniversityPopup = ({ setIsOpen }) => {
             onClick={step === 1 ? handleNext : handleSubmit}
             className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center"
           >
-            {step === 1 ? "Next" : "Submit"}
+            {step === 1 ? "Next" : "Update"}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 ml-2"
