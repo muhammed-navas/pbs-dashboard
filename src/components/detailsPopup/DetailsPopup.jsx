@@ -146,8 +146,8 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
   };
 
   const selectedUniversity = filterData[selectedNameIndex];
-  const selectedModuleData = selectedUniversity.modules[selectedModuleIndex];
-  const selectedChapterData = selectedModuleData.chapter[selectedChapterIndex];
+  const selectedModuleData = selectedUniversity?.modules[selectedModuleIndex];
+  const selectedChapterData = selectedModuleData?.chapter[selectedChapterIndex];
 
   return (
     <div className="bg-white absolute top-0 left-0 w-full z-[99] h-auto min-h-screen">
@@ -296,13 +296,13 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                   <tbody className="divide-y divide-gray-200 bg-white">
                     <tr className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 px-4 text-sm font-medium text-gray-900">
-                        {selectedModuleData.moduleName}
+                        {selectedModuleData?.moduleName}
                       </td>
                       <td className="whitespace-nowrap py-4 px-4 text-sm text-gray-500">
                         <img
                           className="w-16 h-10 object-cover"
-                          src={selectedModuleData.img}
-                          alt={selectedModuleData.moduleName}
+                          src={selectedModuleData?.img}
+                          alt={selectedModuleData?.moduleName}
                         />
                       </td>
                     </tr>
@@ -331,16 +331,16 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                     <tbody className="divide-y divide-gray-200 bg-white">
                       <tr className="divide-x divide-gray-200">
                         <td className="whitespace-nowrap py-4 px-4 text-sm font-medium text-gray-900">
-                          {selectedChapterData.title}
+                          {selectedChapterData?.title}
                         </td>
                         <td className="whitespace-nowrap py-4 px-4 text-sm font-medium text-gray-900">
-                          {selectedChapterData.time}
+                          {selectedChapterData?.time}
                         </td>
                         <td className="whitespace-nowrap py-4 px-4 text-sm text-gray-500">
                           <img
                             className="w-16 h-10 object-cover"
-                            src={selectedChapterData.img}
-                            alt={selectedChapterData.title}
+                            src={selectedChapterData?.img}
+                            alt={selectedChapterData?.title}
                           />
                         </td>
                         <td className="whitespace-nowrap py-4 underline px-4 text-xs cursor-pointer font-medium text-blue-500">
@@ -350,7 +350,7 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                     </tbody>
                   </table>
                   <div className="border-t border-gray-300 pt-3">
-                    {selectedChapterData.description}
+                    {selectedChapterData?.description}
                   </div>
                 </div>
               </>

@@ -1,18 +1,11 @@
-import React from 'react'
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/react";
-import {
-  BellIcon,
-} from "@heroicons/react/24/outline";
+import React from "react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { BellIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
-import { userNavigation } from '../constance/Dashboard';
+import { userNavigation } from "../constance/Dashboard";
 
 export const DashboardHeader = () => {
   return (
@@ -86,4 +79,4 @@ export const DashboardHeader = () => {
       </div>
     </div>
   );
-}
+};

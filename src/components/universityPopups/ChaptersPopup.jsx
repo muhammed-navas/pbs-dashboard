@@ -1,7 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from "react";
 
 export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
+  const [chapterForm, setChapterForm] = useState({
+    title: "",
+    image: null,
+    readingTime: "",
+    summary: "",
+    pdf: null,
+  });
+
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setChapterForm({
+      title: chapter.title || "",
+      image: chapter.image || null,
+      readingTime: chapter.readingTime || "",
+      summary: chapter.summary || "",
+      pdf: chapter.pdf || null,
+    });
+  }, [chapter]);
+
   const handleChapterChange = (field, value) => {
+    setChapterForm((prev) => ({ ...prev, [field]: value }));
+
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+
     setModules(
       modules.map((module) => {
         if (module.id === moduleId) {
@@ -18,108 +48,144 @@ export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
   };
 
   const handleRemoveChapter = () => {
-    setModules(
-      modules.map((module) => {
-        if (module.id === moduleId) {
-          return {
-            ...module,
-            chapters: module.chapters.filter((ch) => ch.id !== chapter.id),
-          };
-        }
-        return module;
-      })
-    );
+    if (window.confirm("Are you sure you want to remove this chapter?")) {
+      setModules(
+        modules.map((module) => {
+          if (module.id === moduleId) {
+            return {
+              ...module,
+              chapters: module.chapters.filter((ch) => ch.id !== chapter.id),
+            };
+          }
+          return module;
+        })
+      );
+    }
+  };
+
+  const handleFileChange = (e, field) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "File size must be less than 5MB",
+      }));
+      return;
+    }
+
+    if (field === "image" && !file.type.startsWith("image/")) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "Please upload a valid image file",
+      }));
+      return;
+    }
+
+    if (field === "pdf" && file.type !== "application/pdf") {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "Please upload a PDF file",
+      }));
+      return;
+    }
+
+    handleChapterChange(field, file);
   };
 
   return (
     <div className="mt-4 bg-gray-100 p-4 rounded-lg">
       <div className="flex justify-between items-center mb-4">
-        <h4 className="text-sm font-semibold">Chapter {chapter.id}</h4>
-        <button
-          onClick={handleRemoveChapter}
-          className="text-gray-500 hover:text-gray-700"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+        <h4>Chapter {chapter.id}</h4>
+        <button onClick={handleRemoveChapter} className="text-gray-500">
+          ×
         </button>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Title
-          </label>
+          <label>Title</label>
           <input
             type="text"
-            value={chapter.title}
+            value={chapterForm.title}
             onChange={(e) => handleChapterChange("title", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            className="w-full px-3 py-2 border rounded"
             placeholder="Enter chapter title"
           />
+          {errors.title && <p className="text-red-500">{errors.title}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Image
-          </label>
+          <label>Image</label>
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleChapterChange("image", e.target.files[0])}
-            className="w-full px-3 py-1.5 border border-gray-300 rounded-md"
+            onChange={(e) => handleFileChange(e, "image")}
+            className="w-full px-3 py-2 border rounded"
           />
+          {errors.image && <p className="text-red-500">{errors.image}</p>}
+          {chapterForm.image && typeof chapterForm.image === "string" && (
+            <img
+              src={chapterForm.image}
+              alt="Chapter preview"
+              className="mt-2 h-10 w-10"
+            />
+          )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            PDF
-          </label>
+          <label>PDF</label>
           <input
             type="file"
             accept="application/pdf"
-            onChange={(e) => handleChapterChange("pdf", e.target.files[0])}
-            className="w-full px-3 py-1.5 border border-gray-300 rounded-md"
+            onChange={(e) => handleFileChange(e, "pdf")}
+            className="w-full px-3 py-2 border rounded"
           />
+          {errors.pdf && <p className="text-red-500">{errors.pdf}</p>}
+          {chapterForm.pdf && (
+            <p className="text-sm">
+              {typeof chapterForm.pdf === "string"
+                ? chapterForm.pdf
+                : chapterForm.pdf.name}
+            </p>
+          )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Reading Time (minutes)
-          </label>
+          <label>Reading Time (minutes)</label>
           <input
-            type="number"
-            value={chapter.readingTime}
+            type="text"
+            min="1"
+            value={chapterForm.readingTime}
             onChange={(e) => handleChapterChange("readingTime", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            className="w-full px-3 py-2 border rounded"
             placeholder="Enter reading time"
           />
+          {errors.readingTime && (
+            <p className="text-red-500">{errors.readingTime}</p>
+          )}
         </div>
 
         <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Summary
-          </label>
+          <label>Summary</label>
           <textarea
-            value={chapter.summary}
+            value={chapterForm.summary}
             onChange={(e) => handleChapterChange("summary", e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none h-24"
+            className="w-full px-3 py-2 border rounded resize-none h-24"
             placeholder="Enter chapter summary"
           />
+          {errors.summary && <p className="text-red-500">{errors.summary}</p>}
         </div>
       </div>
+
+      {Object.keys(errors).length > 0 && (
+        <div className="mt-4 p-2 bg-red-100 text-red-700 rounded">
+          Please fix the errors above before proceeding.
+        </div>
+      )}
     </div>
   );
 };
 
+export default ChaptersPopup;

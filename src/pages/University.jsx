@@ -1,9 +1,7 @@
-
-
 import { useState } from "react";
 import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
 import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
-import { EditUniversityPopup } from "../components/universityPopups/EditUniversityPopup";
+import { DeleteUniversity } from "../components/DeleteUniversity";
 
 const filterData = [
   {
@@ -12,34 +10,39 @@ const filterData = [
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
     modules: [
       {
-        moduleName: "Consult With Modules",
-        img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        name: "consult first modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapter: [
           {
             title: "Chapter 1",
-            description: "Desc 1",
-            time: "34 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 1",
+            readingTime: "34 min",
+            image:
+              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
           {
             title: "Chapter 2",
-            description: "Desc 2",
-            time: "40 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 2",
+            readingTime: "40 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
         ],
       },
       {
-        moduleName: "Consult With Modules 2",
-        img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        name: "consult second modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapter: [
           {
             title: "Chapter 1",
-            description: "Desc 1",
-            time: "20 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 1",
+            readingTime: "20 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
         ],
@@ -52,21 +55,24 @@ const filterData = [
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
     modules: [
       {
-        moduleName: "Training Module",
-        img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        name: "training first modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapter: [
           {
             title: "Chapter 1",
-            description: "Desc 1",
-            time: "15 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 1",
+            readingTime: "15 min",
+            image:
+              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
           {
             title: "Chapter 2",
-            description: "latests chapter",
-            time: "150 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "latests chapter",
+            readingTime: "150 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
         ],
@@ -76,20 +82,50 @@ const filterData = [
 ];
 
 export const University = () => {
+  const [universities, setUniversities] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedUniversity, setSelectedUniversity] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [deleteUniversityHandle, setDeleteUniversityHandle] = useState(false);
+  const [deleteUniversityID, setDeleteUniversityID] = useState(null);
+
+  // const fetchUniversities = async () => {
+  //   try {
+  //     const response = await fetch("/api/universities");
+  //     const data = await response.json();
+  //     setUniversities(data);
+  //   } catch (error) {
+  //     console.error("Error fetching universities:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchUniversities();
+  // }, []);
 
   const handleUniversityClick = (university) => {
     setSelectedUniversity(university);
     setIsOpenPopup(true);
   };
 
+  const handleAddUniversity = () => {
+    setIsEditMode(false);
+    setSelectedUniversity(null);
+    setIsOpen(true);
+  };
+
   const handleEditClick = (e, university) => {
     e.stopPropagation();
     setSelectedUniversity(university);
-    setIsEditOpen(true);
+    setIsEditMode(true);
+    setIsOpen(true);
+  };
+
+  const handleDeleteClick = (e, universityId) => {
+    e.stopPropagation();
+    setDeleteUniversityID(universityId);
+    setDeleteUniversityHandle(true);
   };
 
   return (
@@ -106,7 +142,7 @@ export const University = () => {
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={handleAddUniversity}
             type="button"
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
@@ -114,6 +150,7 @@ export const University = () => {
           </button>
         </div>
       </div>
+
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -134,24 +171,24 @@ export const University = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {filterData.map((university, index) => {
+                {universities.map((university) => {
                   const totalChapters = university.modules.reduce(
-                    (acc, module) => acc + module.chapter.length,
+                    (acc, module) => acc + module.chapters.length,
                     0
                   );
                   return (
                     <tr
                       onClick={() => handleUniversityClick(university)}
                       className="cursor-pointer"
-                      key={index}
+                      key={university._id}
                     >
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm sm:pl-0">
                         <div className="flex items-center">
                           <div className="size-8 shrink-0">
                             <img
                               alt=""
-                              src={university.icon}
-                              className="size-8 rounded-full"
+                              src={university.img}
+                              className="size-8"
                             />
                           </div>
                           <div className="ml-4">
@@ -181,7 +218,10 @@ export const University = () => {
                         >
                           Edit
                         </button>
-                        <button className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                        <button
+                          onClick={(e) => handleDeleteClick(e, university._id)}
+                          className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20"
+                        >
                           Delete
                         </button>
                       </td>
@@ -190,20 +230,28 @@ export const University = () => {
                 })}
               </tbody>
             </table>
-            {isOpen && <UniversityPopup setIsOpen={setIsOpen} />}
           </div>
         </div>
       </div>
+
+      {isOpen && (
+        <UniversityPopup
+          setIsOpen={setIsOpen}
+          isEditMode={isEditMode}
+          universityData={selectedUniversity}
+          filterData={filterData}
+        />
+      )}
       {isOpenPopup && (
         <DetailsPopup
           setIsOpenPopup={setIsOpenPopup}
           university={selectedUniversity}
         />
       )}
-      {isEditOpen && (
-        <EditUniversityPopup
-          setIsOpen={setIsEditOpen}
-          university={selectedUniversity}
+      {deleteUniversityHandle && (
+        <DeleteUniversity
+          deleteUniversityID={deleteUniversityID}
+          setDeleteUniversityHandle={setDeleteUniversityHandle}
         />
       )}
     </div>

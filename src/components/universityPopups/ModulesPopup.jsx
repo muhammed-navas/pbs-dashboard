@@ -1,23 +1,26 @@
-import React, { useState } from 'react'
-import { ChaptersPopup } from './ChaptersPopup';
+import React, { useEffect, useState } from "react";
+import { ChaptersPopup } from "./ChaptersPopup";
 
-export const ModulesPopup = ({ setStep, setIsOpen, step }) => {
-  const [modules, setModules] = useState([
-    {
-      id: 1,
-      name: "",
-      image: null,
-      chapters: [],
-    },
-  ]);
+export const ModulesPopup = ({
+  setStep,
+  setModulesData,
+  modules: initialModules,
+  isEditMode,
+}) => {
+  const [modules, setModules] = useState(initialModules || []);
   const maxModules = 5;
+  const maxChapters = 2;
+
+  useEffect(() => {
+    setModulesData((prev) => ({ ...prev, modules }));
+  }, [modules, setModulesData]);
 
   const handleAddModule = () => {
     if (modules.length < maxModules) {
       setModules([
         ...modules,
         {
-          id: modules.length + 1,
+          id: Date.now(),
           name: "",
           image: null,
           chapters: [],
@@ -41,13 +44,13 @@ export const ModulesPopup = ({ setStep, setIsOpen, step }) => {
   const handleAddChapter = (moduleId) => {
     setModules(
       modules.map((module) => {
-        if (module.id === moduleId && module.chapters.length >= 0) {
+        if (module.id === moduleId && module.chapters.length < maxChapters) {
           return {
             ...module,
             chapters: [
               ...module.chapters,
               {
-                id: module.chapters.length + 1,
+                id: Date.now(),
                 title: "",
                 image: null,
                 pdf: null,
@@ -63,7 +66,7 @@ export const ModulesPopup = ({ setStep, setIsOpen, step }) => {
   };
 
   return (
-    <div className=" rounded-lg p-2 w-full h-[25rem]  overflow-y-scroll">
+    <div className="rounded-lg p-2 w-full h-[25rem] overflow-y-scroll">
       <div className="space-y-4">
         <div className="flex gap-4 mb-6">
           <button
@@ -76,7 +79,7 @@ export const ModulesPopup = ({ setStep, setIsOpen, step }) => {
         </div>
 
         {modules.map((module) => (
-          <div key={module.id} className=" p-4 rounded-lg  shadow">
+          <div key={module.id} className="p-4 rounded-lg shadow">
             <div className="flex items-center gap-4 mb-4">
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -106,10 +109,19 @@ export const ModulesPopup = ({ setStep, setIsOpen, step }) => {
                   className="w-full px-3 py-1.5 border border-gray-300 rounded-md"
                 />
               </div>
-
+              {module.image && (
+                <img
+                  src={module.image}
+                  alt="Icon Preview"
+                  className="w-10 h-10 object-cover rounded"
+                />
+              )}
               {modules.length > 1 && (
                 <button
-                  onClick={() => handleRemoveModule(module.id)}
+                  onClick={() => {
+                    handleRemoveModule(module.id);
+                    handleDeleteModule(module.id);
+                  }}
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <svg
@@ -133,21 +145,23 @@ export const ModulesPopup = ({ setStep, setIsOpen, step }) => {
             <div className="mt-4">
               <button
                 onClick={() => handleAddChapter(module.id)}
-                // disabled={module.chapters.length >= 2}
+                disabled={module?.chapters?.length >= maxChapters}
                 className="text-sm text-blue-500 hover:text-blue-700 disabled:opacity-50"
               >
-                + Add Chapter (Max 2)
+                + Add Chapter (Max {maxChapters})
               </button>
 
-              {module.chapters.map((chapter) => (
-                <ChaptersPopup
-                  key={chapter.id}
-                  moduleId={module.id}
-                  chapter={chapter}
-                  modules={modules}
-                  setModules={setModules}
-                />
-              ))}
+              {/* Fixed the chapters mapping here */}
+              {module.chapters &&
+                module.chapters.map((chapter) => (
+                  <ChaptersPopup
+                    key={chapter.id}
+                    moduleId={module.id}
+                    chapter={chapter}
+                    modules={modules}
+                    setModules={setModules}
+                  />
+                ))}
             </div>
           </div>
         ))}

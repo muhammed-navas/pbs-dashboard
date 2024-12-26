@@ -15,10 +15,10 @@ import {
 
 import { Link } from "react-router-dom";
 import { DashboardSection } from "../pages/DashboardSection";
-import { University } from "../pages/University";
 import { navigation, teams } from "../constance/Dashboard";
 import { DashboardHeader } from "../pages/DashboardHeader";
-import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
+import {University } from "../pages/University";
+
 
 
 const AdminDashboard = () => {
@@ -36,7 +36,7 @@ const renderComponent = () => {
     case "Projects":
       return <div>Projects Component</div>;
     case "PBS University":
-        return  <University />
+        return <University />;
     case "Tailwind Labs":
         return <div>Tailwind Labs Component</div>;
     default:
