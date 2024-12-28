@@ -4,17 +4,17 @@ import { DeleteUniversity } from "../components/DeleteUniversity";
 import { UniversityPopup} from '../components/universityPopups/UniversityPopup'
 
 const initialUniversities = [
-  {
+  { _id:1,
     name: "Consult",
     img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
     modules: [
-      {
+      {  _id:100,
         name: "consult first modules 1",
         image:
           "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapters: [
-          {
+          { _id:1001,
             title: "Chapter 1",
             summary: "Desc 1",
             readingTime: "34 min",
@@ -22,7 +22,7 @@ const initialUniversities = [
               "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
-          {
+          { _id:1002,
             title: "Chapter 2",
             summary: "Desc 2",
             readingTime: "40 min",
@@ -32,7 +32,7 @@ const initialUniversities = [
           },
         ],
       },
-      {
+      { _id:101,
         name: "consult second modules 1",
         image:
           "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
@@ -49,7 +49,7 @@ const initialUniversities = [
       },
     ],
   },
-  {
+  { _id:2,
     name: "Training",
     img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",

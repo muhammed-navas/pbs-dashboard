@@ -120,7 +120,7 @@ export const ModulesPopup = ({
                   className="w-10 h-10 object-cover rounded"
                 />
               )}
-              {modules.length > 1 && (
+              {modules.length > 1 && !isEditMode && (
                 <button
                   onClick={() => handleRemoveModule(module.id)}
                   className="text-gray-500 hover:text-gray-700"
@@ -146,7 +146,7 @@ export const ModulesPopup = ({
             <div className="mt-4">
               <button
                 onClick={() => handleAddChapter(module.id)}
-                disabled={module.chapters.length >= maxChapters}
+                disabled={module?.chapters?.length >= maxChapters}
                 className="text-sm text-blue-500 hover:text-blue-700 disabled:opacity-50"
               >
                 + Add Chapter (Max {maxChapters})
@@ -155,10 +155,11 @@ export const ModulesPopup = ({
               {module.chapters &&
                 module.chapters.map((chapter) => (
                   <ChaptersPopup
-                    key={chapter.id}
-                    moduleId={module.id}
+                    key={chapter._id}
+                    moduleId={module._id}
                     chapter={chapter}
                     modules={modules}
+                    isEditMode={isEditMode}
                     setModules={setModules}
                   />
                 ))}

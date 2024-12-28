@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
+export const ChaptersPopup = ({
+  moduleId,
+  isEditMode,
+  chapter,
+  modules,
+  setModules,
+}) => {
   const [chapterForm, setChapterForm] = useState({
     title: "",
     image: null,
@@ -51,10 +57,12 @@ export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
     if (window.confirm("Are you sure you want to remove this chapter?")) {
       setModules(
         modules.map((module) => {
-          if (module.id === moduleId) {
+          if (module._id === moduleId) {
             return {
               ...module,
-              chapters: module.chapters.filter((ch) => ch.id !== chapter.id),
+              chapters: module?.chapters?.filter(
+                (ch) => ch._id !== chapter._id
+              ),
             };
           }
           return module;
@@ -98,9 +106,11 @@ export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
     <div className="mt-4 bg-gray-100 p-4 rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h4>Chapter {chapter.id}</h4>
-        <button onClick={handleRemoveChapter} className="text-gray-500">
-          ×
-        </button>
+        {!isEditMode && (
+          <button onClick={handleRemoveChapter} className="text-gray-500">
+            ×
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
