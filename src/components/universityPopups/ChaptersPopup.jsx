@@ -125,9 +125,13 @@ export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
             className="w-full px-3 py-2 border rounded"
           />
           {errors.image && <p className="text-red-500">{errors.image}</p>}
-          {chapterForm.image && typeof chapterForm.image === "string" && (
+          {chapterForm.image && (
             <img
-              src={chapterForm.image}
+              src={
+                typeof chapterForm.image === "string"
+                  ? chapterForm.image
+                  : URL.createObjectURL(chapterForm.image)
+              }
               alt="Chapter preview"
               className="mt-2 h-10 w-10"
             />
@@ -156,7 +160,6 @@ export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
           <label>Reading Time (minutes)</label>
           <input
             type="text"
-            min="1"
             value={chapterForm.readingTime}
             onChange={(e) => handleChapterChange("readingTime", e.target.value)}
             className="w-full px-3 py-2 border rounded"
@@ -187,5 +190,3 @@ export const ChaptersPopup = ({ moduleId, chapter, modules, setModules }) => {
     </div>
   );
 };
-
-export default ChaptersPopup;

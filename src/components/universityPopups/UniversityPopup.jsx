@@ -51,30 +51,21 @@ export const UniversityPopup = ({
     if (formData.icon) formDataToSend.append("icon", formData.icon);
     formDataToSend.append("modules", JSON.stringify(formData.modules));
 
-const allFormData = Array.from(formDataToSend.entries()).map(
-  ([key, value]) => `${key}: ${value instanceof File ? value.name : value}`
-);
-console.log(allFormData.join("\n"), "This is the FormData content");
     try {
-      // const url = isEditMode
-      //   ? `/api/universities/${universityData._id}`
-      //   : "/api/universities";
-      const method = isEditMode ? "PUT" : "POST";
-      // const response = await fetch(url, {
-      //   method,
-      //   body: formDataToSend,
-      // });
-
+      // Simulating API call
+      console.log("Submitting data:", Object.fromEntries(formDataToSend));
+      // In a real scenario, you would make an API call here
+      // const response = await fetch(url, { method, body: formDataToSend });
       // if (response.ok) {
       //   onUniversityUpdate();
-        setIsOpen(false);
-      // } else {
-      //   console.error("Failed to save university");
       // }
+      onUniversityUpdate(formData);
+      setIsOpen(false);
     } catch (error) {
       console.error("Error saving university:", error);
     }
   };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex z-[99999] items-center justify-center">
       <div className="bg-white rounded-lg p-10 w-3/4 h-[35rem] relative">

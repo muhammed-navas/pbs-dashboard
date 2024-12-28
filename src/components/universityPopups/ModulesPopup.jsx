@@ -111,17 +111,18 @@ export const ModulesPopup = ({
               </div>
               {module.image && (
                 <img
-                  src={module.image}
+                  src={
+                    typeof module.image === "string"
+                      ? module.image
+                      : URL.createObjectURL(module.image)
+                  }
                   alt="Icon Preview"
                   className="w-10 h-10 object-cover rounded"
                 />
               )}
               {modules.length > 1 && (
                 <button
-                  onClick={() => {
-                    handleRemoveModule(module.id);
-                    handleDeleteModule(module.id);
-                  }}
+                  onClick={() => handleRemoveModule(module.id)}
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <svg
@@ -145,14 +146,14 @@ export const ModulesPopup = ({
             <div className="mt-4">
               <button
                 onClick={() => handleAddChapter(module.id)}
-                disabled={module?.chapters?.length >= maxChapters}
+                disabled={module.chapters.length >= maxChapters}
                 className="text-sm text-blue-500 hover:text-blue-700 disabled:opacity-50"
               >
                 + Add Chapter (Max {maxChapters})
               </button>
 
-              {module?.chapter &&
-                module?.chapter?.map((chapter) => (
+              {module.chapters &&
+                module.chapters.map((chapter) => (
                   <ChaptersPopup
                     key={chapter.id}
                     moduleId={module.id}

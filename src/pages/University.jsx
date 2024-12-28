@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
+import {  useState } from "react";
 import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
+import { UniversityPopup} from '../components/universityPopups/UniversityPopup'
 
-const filterData = [
+const initialUniversities = [
   {
     name: "Consult",
     img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
@@ -13,7 +13,7 @@ const filterData = [
         name: "consult first modules 1",
         image:
           "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-        chapter: [
+        chapters: [
           {
             title: "Chapter 1",
             summary: "Desc 1",
@@ -36,7 +36,7 @@ const filterData = [
         name: "consult second modules 1",
         image:
           "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-        chapter: [
+        chapters: [
           {
             title: "Chapter 1",
             summary: "Desc 1",
@@ -58,7 +58,7 @@ const filterData = [
         name: "training first modules 1",
         image:
           "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-        chapter: [
+        chapters: [
           {
             title: "Chapter 1",
             summary: "Desc 1",
@@ -82,7 +82,7 @@ const filterData = [
 ];
 
 export const University = () => {
-  const [universities, setUniversities] = useState([]);
+  const [universities, setUniversities] = useState(initialUniversities);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const [selectedUniversity, setSelectedUniversity] = useState(null);
@@ -90,22 +90,7 @@ export const University = () => {
   const [deleteUniversityHandle, setDeleteUniversityHandle] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
 
-  const fetchUniversities = async () => {
-    try {
-      // const response = await fetch("/api/universities");
-      // const data = await response.json();
-      setUniversities(filterData);
-    } catch (error) {
-      console.error("Error fetching universities:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUniversities();
-  }, []);
-
   const handleUniversityClick = (university) => {
-    console.log(university,'%%%%%%');
     setSelectedUniversity(university);
     setIsOpenPopup(true);
   };
@@ -117,17 +102,33 @@ export const University = () => {
   };
 
   const handleEditClick = (e, university) => {
-    console.log(university,'&&&&&&&&&&&&');
     e.stopPropagation();
     setSelectedUniversity(university);
     setIsEditMode(true);
     setIsOpen(true);
   };
 
-  const handleDeleteClick = (e, universityId) => {
+  const handleDeleteClick = (e, universityName) => {
     e.stopPropagation();
-    setDeleteID(universityId);
+    setDeleteID(universityName);
     setDeleteUniversityHandle(true);
+  };
+
+  const handleUniversityUpdate = (updatedUniversity) => {
+    if (isEditMode) {
+      setUniversities(
+        universities.map((uni) =>
+          uni.name === updatedUniversity.name ? updatedUniversity : uni
+        )
+      );
+    } else {
+      setUniversities([...universities, updatedUniversity]);
+    }
+  };
+
+  const handleDeleteUniversity = (universityName) => {
+    setUniversities(universities.filter((uni) => uni.name !== universityName));
+    setDeleteUniversityHandle(false);
   };
 
   return (
@@ -174,7 +175,7 @@ export const University = () => {
                 {universities.map((university) => {
                   const totalChapters = university.modules.reduce(
                     (acc, module) => {
-                      return acc + (module.chapter?.length || 0);
+                      return acc + (module.chapters?.length || 0);
                     },
                     0
                   );
@@ -182,7 +183,7 @@ export const University = () => {
                     <tr
                       onClick={() => handleUniversityClick(university)}
                       className="cursor-pointer"
-                      key={university._id}
+                      key={university.name}
                     >
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm sm:pl-0">
                         <div className="flex items-center">
@@ -207,7 +208,7 @@ export const University = () => {
                       </td>
                       <td className="whitespace-nowrap px-0 py-5 text-sm text-gray-500">
                         <div className="mt-1 text-gray-500">
-                          {totalChapters} 
+                          {totalChapters}
                         </div>
                       </td>
                       <td
@@ -241,7 +242,7 @@ export const University = () => {
           setIsOpen={setIsOpen}
           isEditMode={isEditMode}
           universityData={selectedUniversity}
-          filterData={filterData}
+          onUniversityUpdate={handleUniversityUpdate}
         />
       )}
       {isOpenPopup && (
@@ -259,6 +260,7 @@ export const University = () => {
           deleteID={deleteID}
           deleteUniversityHandle={deleteUniversityHandle}
           setDeleteUniversityHandle={setDeleteUniversityHandle}
+          onDelete={handleDeleteUniversity}
         />
       )}
     </div>
