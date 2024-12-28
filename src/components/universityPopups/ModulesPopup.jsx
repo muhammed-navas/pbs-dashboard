@@ -151,9 +151,8 @@ export const ModulesPopup = ({
                 + Add Chapter (Max {maxChapters})
               </button>
 
-              {/* Fixed the chapters mapping here */}
-              {module.chapters &&
-                module.chapters.map((chapter) => (
+              {module?.chapter &&
+                module?.chapter?.map((chapter) => (
                   <ChaptersPopup
                     key={chapter.id}
                     moduleId={module.id}

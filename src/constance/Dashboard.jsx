@@ -15,7 +15,7 @@ import {
  export const teams = [
    {
      id: 1,
-     name: "PBS University",
+     name: "PBS Vertical",
      href: "#",
      icon: "/icons/university.png",
    },

@@ -35,10 +35,10 @@ const renderComponent = () => {
       return <div>Team Component</div>;
     case "Projects":
       return <div>Projects Component</div>;
-    case "PBS University":
-        return <University />;
+    case "PBS Vertical":
+      return <University />;
     case "Tailwind Labs":
-        return <div>Tailwind Labs Component</div>;
+      return <div>Tailwind Labs Component</div>;
     default:
       return <div>Select a navigation item or team</div>;
   }

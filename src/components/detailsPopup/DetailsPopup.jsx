@@ -8,34 +8,39 @@ const filterData = [
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
     modules: [
       {
-        moduleName: "Consult With Modules",
-        img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        name: "consult first modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapter: [
           {
             title: "Chapter 1",
-            description: "Desc 1",
-            time: "34 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 1",
+            readingTime: "34 min",
+            image:
+              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
           {
             title: "Chapter 2",
-            description: "Desc 2",
-            time: "40 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 2",
+            readingTime: "40 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
         ],
       },
       {
-        moduleName: "Consult With Modules 2",
-        img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        name: "consult second modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapter: [
           {
             title: "Chapter 1",
-            description: "Desc 1",
-            time: "20 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 1",
+            readingTime: "20 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
         ],
@@ -48,21 +53,24 @@ const filterData = [
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
     modules: [
       {
-        moduleName: "Training Module",
-        img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        name: "training first modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapter: [
           {
             title: "Chapter 1",
-            description: "Desc 1",
-            time: "15 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "Desc 1",
+            readingTime: "15 min",
+            image:
+              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
           {
             title: "Chapter 2",
-            description: "latests chapter",
-            time: "150 min",
-            img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            summary: "latests chapter",
+            readingTime: "150 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
         ],
@@ -71,7 +79,13 @@ const filterData = [
   },
 ];
 
-export const DetailsPopup = ({ setIsOpenPopup }) => {
+export const DetailsPopup = ({
+  setIsOpenPopup,
+  setDeleteUniversityHandle,
+  setDeleteID,
+  setIsOpen,
+  setSelectedUniversity,
+}) => {
   const [selectedName, setSelectedName] = useState("Select University");
   const [selectedModule, setSelectedModule] = useState("Select Module");
   const [selectedChapter, setSelectedChapter] = useState("Select Chapter");
@@ -149,6 +163,15 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
   const selectedModuleData = selectedUniversity?.modules[selectedModuleIndex];
   const selectedChapterData = selectedModuleData?.chapter[selectedChapterIndex];
 
+  const deleteHandle = (id) => {
+    setDeleteUniversityHandle(true);
+    setDeleteID(id);
+  };
+  const editHandle = () => {
+    console.log(selectedUniversity,'----------');
+    setSelectedUniversity(selectedUniversity);
+    setIsOpen(true);
+  };
   return (
     <div className="bg-white absolute top-0 left-0 w-full z-[99] h-auto min-h-screen">
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -234,11 +257,24 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
           <div className="w-3/4 h-auto">
             <div className="">
               <>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between  items-center">
                   <h3 className="pb-2 font-semibold">
                     {selectedUniversity.name}
                   </h3>
-                  <button>Edit</button>
+                  <div className="">
+                    <button
+                      onClick={editHandle}
+                      className="inline-flex mr-2 items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteHandle(selectedUniversity.name)}
+                      className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
                 <table className="w-full border rounded-lg border-gray-300">
                   <thead className="bg-gray-100">
@@ -278,7 +314,23 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                 </table>
               </>
               <>
-                <h3 className="pt-2 font-semibold">Module</h3>
+                <div className="flex justify-between  items-center">
+                  <h3 className="pb-2 font-semibold">Modules</h3>
+                  <div className="">
+                    <button
+                      onClick={editHandle}
+                      className="inline-flex mr-2 items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteHandle("modules")}
+                      className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
                 <table className="w-full border mt-1 border-gray-300">
                   <thead className="bg-gray-100">
                     <tr>
@@ -296,13 +348,13 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                   <tbody className="divide-y divide-gray-200 bg-white">
                     <tr className="divide-x divide-gray-200">
                       <td className="whitespace-nowrap py-4 px-4 text-sm font-medium text-gray-900">
-                        {selectedModuleData?.moduleName}
+                        {selectedModuleData?.name}
                       </td>
                       <td className="whitespace-nowrap py-4 px-4 text-sm text-gray-500">
                         <img
                           className="w-16 h-10 object-cover"
-                          src={selectedModuleData?.img}
-                          alt={selectedModuleData?.moduleName}
+                          src={selectedModuleData?.image}
+                          alt={selectedModuleData?.name}
                         />
                       </td>
                     </tr>
@@ -310,7 +362,23 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                 </table>
               </>
               <>
-                <h3 className="pt-2 font-semibold">Chapter</h3>
+                <div className="flex justify-between  items-center">
+                  <h3 className="pb-2 font-semibold">Chapters</h3>
+                  <div className="">
+                    <button
+                      onClick={editHandle}
+                      className="inline-flex mr-2 items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteHandle("Chapters")}
+                      className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
                 <div className="border border-gray-300 p-2">
                   <table className="w-full mt-1">
                     <thead className="bg-gray-100">
@@ -334,12 +402,12 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                           {selectedChapterData?.title}
                         </td>
                         <td className="whitespace-nowrap py-4 px-4 text-sm font-medium text-gray-900">
-                          {selectedChapterData?.time}
+                          {selectedChapterData?.readingTime}
                         </td>
                         <td className="whitespace-nowrap py-4 px-4 text-sm text-gray-500">
                           <img
                             className="w-16 h-10 object-cover"
-                            src={selectedChapterData?.img}
+                            src={selectedChapterData?.image}
                             alt={selectedChapterData?.title}
                           />
                         </td>
@@ -350,7 +418,7 @@ export const DetailsPopup = ({ setIsOpenPopup }) => {
                     </tbody>
                   </table>
                   <div className="border-t border-gray-300 pt-3">
-                    {selectedChapterData?.description}
+                    {selectedChapterData?.summary}
                   </div>
                 </div>
               </>

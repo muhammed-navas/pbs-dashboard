@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
 import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
 
-// Static data for demo purposes
 const filterData = [
   {
     name: "Consult",
@@ -83,54 +82,67 @@ const filterData = [
 ];
 
 export const University = () => {
-  // Initialize universities state with filterData
-  const [universities, setUniversities] = useState(filterData);
+  const [universities, setUniversities] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
-  const [selectedVertical, setSelectedVertical] = useState(null);
+  const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [deleteVerticalHandle, setDeleteVerticalHandle] = useState(false);
-  const [deleteVerticalID, setDeleteVerticalID] = useState(null);
+  const [deleteUniversityHandle, setDeleteUniversityHandle] = useState(false);
+  const [deleteID, setDeleteID] = useState(null);
 
-  const handleVerticalClick = (university) => {
-    setSelectedVertical(university);
+  const fetchUniversities = async () => {
+    try {
+      // const response = await fetch("/api/universities");
+      // const data = await response.json();
+      setUniversities(filterData);
+    } catch (error) {
+      console.error("Error fetching universities:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUniversities();
+  }, []);
+
+  const handleUniversityClick = (university) => {
+    console.log(university,'%%%%%%');
+    setSelectedUniversity(university);
     setIsOpenPopup(true);
   };
 
-  const handleAddVertical = () => {
+  const handleAddUniversity = () => {
     setIsEditMode(false);
-    setSelectedVertical(null);
+    setSelectedUniversity(null);
     setIsOpen(true);
   };
 
   const handleEditClick = (e, university) => {
+    console.log(university,'&&&&&&&&&&&&');
     e.stopPropagation();
-    setSelectedVertical(university);
+    setSelectedUniversity(university);
     setIsEditMode(true);
     setIsOpen(true);
   };
 
   const handleDeleteClick = (e, universityId) => {
     e.stopPropagation();
-    setDeleteVerticalID(universityId);
-    setDeleteVerticalHandle(true);
+    setDeleteID(universityId);
+    setDeleteUniversityHandle(true);
   };
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold text-gray-900">
-            Universities
-          </h1>
+          <h1 className="text-base font-semibold text-gray-900">Vertical</h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all the universities including their name, modules, and
+            A list of all the Vertical including their name, modules, and
             chapters.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
-            onClick={handleAddVertical}
+            onClick={handleAddUniversity}
             type="button"
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
@@ -159,37 +171,43 @@ export const University = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {universities.map((vertical, index) => {
-                  const totalChapters = vertical.modules.reduce(
-                    (acc, module) => acc + (module.chapter?.length || 0),
+                {universities.map((university) => {
+                  const totalChapters = university.modules.reduce(
+                    (acc, module) => {
+                      return acc + (module.chapter?.length || 0);
+                    },
                     0
                   );
                   return (
                     <tr
-                      onClick={() => handleVerticalClick(vertical)}
+                      onClick={() => handleUniversityClick(university)}
                       className="cursor-pointer"
-                      key={vertical._id || index}
+                      key={university._id}
                     >
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm sm:pl-0">
                         <div className="flex items-center">
                           <div className="size-8 shrink-0">
-                            <img alt="" src={vertical.img} className="size-8" />
+                            <img
+                              alt=""
+                              src={university.img}
+                              className="size-8"
+                            />
                           </div>
                           <div className="ml-4">
                             <div className="font-medium text-gray-900">
-                              {vertical.name}
+                              {university.name}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-0 py-5 text-sm text-gray-500">
                         <div className="mt-1 text-gray-500">
-                          {vertical.modules.length}
+                          {university.modules.length}
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-0 py-5 text-sm text-gray-500">
                         <div className="mt-1 text-gray-500">
-                          {totalChapters}
+                          {totalChapters} 
                         </div>
                       </td>
                       <td
@@ -197,15 +215,13 @@ export const University = () => {
                         className="relative whitespace-nowrap space-x-3 py-5 pr-4 text-sm font-medium sm:pr-0"
                       >
                         <button
-                          onClick={(e) => handleEditClick(e, vertical)}
+                          onClick={(e) => handleEditClick(e, university)}
                           className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
                         >
                           Edit
                         </button>
                         <button
-                          onClick={(e) =>
-                            handleDeleteClick(e, vertical._id || index)
-                          }
+                          onClick={(e) => handleDeleteClick(e, university.name)}
                           className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20"
                         >
                           Delete
@@ -224,20 +240,25 @@ export const University = () => {
         <UniversityPopup
           setIsOpen={setIsOpen}
           isEditMode={isEditMode}
-          universityData={selectedVertical}
+          universityData={selectedUniversity}
           filterData={filterData}
         />
       )}
       {isOpenPopup && (
         <DetailsPopup
           setIsOpenPopup={setIsOpenPopup}
-          university={selectedVertical}
+          university={selectedUniversity}
+          setDeleteUniversityHandle={setDeleteUniversityHandle}
+          setDeleteID={setDeleteID}
+          setIsOpen={setIsOpen}
+          setSelectedUniversity={setSelectedUniversity}
         />
       )}
-      {deleteVerticalHandle && (
+      {deleteUniversityHandle && (
         <DeleteUniversity
-          deleteUniversityID={deleteVerticalID}
-          setDeleteUniversityHandle={setDeleteVerticalHandle}
+          deleteID={deleteID}
+          deleteUniversityHandle={deleteUniversityHandle}
+          setDeleteUniversityHandle={setDeleteUniversityHandle}
         />
       )}
     </div>

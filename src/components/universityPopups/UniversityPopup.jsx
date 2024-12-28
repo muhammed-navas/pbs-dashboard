@@ -67,7 +67,7 @@ console.log(allFormData.join("\n"), "This is the FormData content");
 
       // if (response.ok) {
       //   onUniversityUpdate();
-      //   setIsOpen(false);
+        setIsOpen(false);
       // } else {
       //   console.error("Failed to save university");
       // }

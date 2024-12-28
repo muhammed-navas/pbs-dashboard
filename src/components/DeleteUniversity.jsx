@@ -9,20 +9,26 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 
 export  const DeleteUniversity = ({
   setDeleteUniversityHandle,
-  deleteUniversityID,
+  deleteID,
+  deleteUniversityHandle,
 }) => {
   const [open, setOpen] = useState(true);
 
   const deleteTheUniversity = () => {
-    //  deleteUniversityID;  
-    setDeleteUniversityHandle(false)
+    //  deleteID with api;
+    console.log(deleteID,'delete id ');
+    setDeleteUniversityHandle(false);
   };
 
   return (
-    <Dialog open={open} onClose={setOpen} className="relative z-10">
+    <Dialog
+      open={deleteUniversityHandle}
+      onClose={() => setDeleteUniversityHandle(false)}
+      className="relative z-[999]"
+    >
       <DialogBackdrop
         transition
-        className="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+        className="fixed inset-0 bg-gray-900/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
       />
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -43,7 +49,7 @@ export  const DeleteUniversity = ({
                   as="h3"
                   className="text-base font-semibold text-gray-900"
                 >
-                Sure  Delete The University 
+                  Sure Delete The Vertical
                 </DialogTitle>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
