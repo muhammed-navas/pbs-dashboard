@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ModulesPopup } from "./ModulesPopup";
+import axios from "axios";
 
+
+ const BACKEND_URL = "https://pbs-0jan.onrender.com";
 export const UniversityPopup = ({
   setIsOpen,
   isEditMode,
@@ -53,12 +56,15 @@ export const UniversityPopup = ({
 
     try {
       // Simulating API call
-      console.log("Submitting data:", Object.fromEntries(formDataToSend));
-      // In a real scenario, you would make an API call here
-      // const response = await fetch(url, { method, body: formDataToSend });
-      // if (response.ok) {
-      //   onUniversityUpdate();
-      // }
+      const apiUrl = isEditMode ?`${BACKEND_URL}/admin/add-university-hierarchy?id=` :  `${BACKEND_URL}/admin/add-university-hierarchy`
+      const method = isEditMode ? 'put':'post'
+      const response = await axios.method(apiUrl, {
+        method,
+        body: formDataToSend,
+      });
+      if (response.ok) {
+        onUniversityUpdate();
+      }
       onUniversityUpdate(formData);
       setIsOpen(false);
     } catch (error) {

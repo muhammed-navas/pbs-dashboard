@@ -6,7 +6,10 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
+
+ const BACKEND_URL = "https://pbs-0jan.onrender.com";
 export  const DeleteUniversity = ({
   setDeleteUniversityHandle,
   deleteID,
@@ -14,10 +17,15 @@ export  const DeleteUniversity = ({
 }) => {
   const [open, setOpen] = useState(true);
 
-  const deleteTheUniversity = () => {
-    //  deleteID with api;
-    console.log(deleteID,'delete id ');
-    setDeleteUniversityHandle(false);
+  const deleteTheUniversity = async () => {
+    try {
+      await axios.delete(`${BACKEND_URL}/admin/delete-data`);
+      console.log(deleteID, "delete id ");
+      setDeleteUniversityHandle(false);
+    } catch (error) {
+      console.log(error.message)
+    }
+   
   };
 
   return (

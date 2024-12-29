@@ -1,7 +1,9 @@
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
 import { UniversityPopup} from '../components/universityPopups/UniversityPopup'
+import { SiAxios } from "react-icons/si";
+import axios from "axios";
 
 const initialUniversities = [
   { _id:1,
@@ -81,6 +83,9 @@ const initialUniversities = [
   },
 ];
 
+
+ const BACKEND_URL = "https://pbs-0jan.onrender.com"
+
 export const University = () => {
   const [universities, setUniversities] = useState(initialUniversities);
   const [isOpen, setIsOpen] = useState(false);
@@ -89,6 +94,20 @@ export const University = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [deleteUniversityHandle, setDeleteUniversityHandle] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
+
+
+  const fetchData = async () =>{
+    try {
+      const response = await axios.get(`${BACKEND_URL}/admin/get-university-hierarchy`);
+      console.log(response.data,'this is data ----------------')
+      setUniversities(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }  
+  useEffect(()=>{
+    fetchData();
+  },[])
 
   const handleUniversityClick = (university) => {
     setSelectedUniversity(university);
