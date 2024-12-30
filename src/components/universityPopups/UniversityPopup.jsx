@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ModulesPopup } from "./ModulesPopup";
 import axios from "axios";
 
-
- const BACKEND_URL = "https://pbs-1-8vqs.onrender.com";
+const BACKEND_URL = "https://pbs-2-steh.onrender.com";
 export const UniversityPopup = ({
   setIsOpen,
   isEditMode,
@@ -19,6 +18,7 @@ export const UniversityPopup = ({
     modules: [],
   });
   const [step, setStep] = useState(1);
+  const [changes, setChanges] = useState({});
 
   useEffect(() => {
     if (isEditMode && universityData) {
@@ -44,6 +44,11 @@ export const UniversityPopup = ({
         [field]: file,
         [previewField]: URL.createObjectURL(file),
       }));
+
+      setChanges((prev) => ({
+        ...prev,
+        [field]: true,
+      }));
     }
   };
 
@@ -53,19 +58,22 @@ export const UniversityPopup = ({
     if (formData.image) formDataToSend.append("image", formData.image);
     if (formData.icon) formDataToSend.append("icon", formData.icon);
     formDataToSend.append("modules", JSON.stringify(formData.modules));
-
+     for (const [key, value] of formDataToSend.entries()) {
+       console.log(`${key}:`, value,'---------');
+     }
     try {
       // Simulating API call
-      const apiUrl = isEditMode ?`${BACKEND_URL}/admin/add-university-hierarchy?id=` :  `${BACKEND_URL}/admin/add-university-hierarchy`
-      const method = isEditMode ? 'put':'post'
-      const response = await axios.method(apiUrl, {
-        method,
-        body: formDataToSend,
-      });
-      if (response.ok) {
+      // const apiUrl = isEditMode
+      //   ? `${BACKEND_URL}/admin/add-university-hierarchy?id=`
+      //   : `${BACKEND_URL}/admin/add-university-hierarchy`;
+      // const method = isEditMode ? "put" : "post";
+      const response = await axios.post(
+        `${BACKEND_URL}/admin/add-university-hierarchy`,
+        formDataToSend
+      );
+      if (response.status === 200) {
         onUniversityUpdate();
       }
-      onUniversityUpdate(formData);
       setIsOpen(false);
     } catch (error) {
       console.error("Error saving university:", error);
@@ -171,6 +179,8 @@ export const UniversityPopup = ({
             modules={formData.modules}
             setModulesData={setFormData}
             isEditMode={isEditMode}
+            changes={changes}
+            setChanges={setChanges}
           />
         )}
 

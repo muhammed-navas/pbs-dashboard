@@ -8,6 +8,7 @@ export const ModulesPopup = ({
   isEditMode,
 }) => {
   const [modules, setModules] = useState(initialModules || []);
+  const [changes, setChanges] = useState({});
   const maxModules = 5;
   const maxChapters = 2;
 
@@ -17,20 +18,27 @@ export const ModulesPopup = ({
 
   const handleAddModule = () => {
     if (modules.length < maxModules) {
-      setModules([
-        ...modules,
-        {
-          id: Date.now(),
-          name: "",
-          image: null,
-          chapters: [],
-        },
-      ]);
+      const newModule = {
+        id: Date.now(),
+        name: "",
+        image: null,
+        chapters: [],
+      };
+      setModules([...modules, newModule]);
+      setChanges((prev) => ({
+        ...prev,
+        [newModule.id]: { isNew: true },
+      }));
     }
   };
 
   const handleRemoveModule = (moduleId) => {
     setModules(modules.filter((module) => module.id !== moduleId));
+    setChanges((prev) => {
+      const newChanges = { ...prev };
+      delete newChanges[moduleId];
+      return newChanges;
+    });
   };
 
   const handleModuleChange = (moduleId, field, value) => {
@@ -39,30 +47,76 @@ export const ModulesPopup = ({
         module.id === moduleId ? { ...module, [field]: value } : module
       )
     );
+    setChanges((prev) => ({
+      ...prev,
+      [moduleId]: {
+        ...prev[moduleId],
+        [field]: true,
+      },
+    }));
   };
 
   const handleAddChapter = (moduleId) => {
     setModules(
       modules.map((module) => {
         if (module.id === moduleId && module.chapters.length < maxChapters) {
+          const newChapter = {
+            id: Date.now(),
+            title: "",
+            image: null,
+            pdf: null,
+            readingTime: "",
+            summary: "",
+          };
           return {
             ...module,
-            chapters: [
-              ...module.chapters,
-              {
-                id: Date.now(),
-                title: "",
-                image: null,
-                pdf: null,
-                readingTime: "",
-                summary: "",
-              },
-            ],
+            chapters: [...module.chapters, newChapter],
           };
         }
         return module;
       })
     );
+    setChanges((prev) => ({
+      ...prev,
+      [moduleId]: {
+        ...prev[moduleId],
+        chapters: {
+          ...prev[moduleId]?.chapters,
+          [Date.now()]: { isNew: true },
+        },
+      },
+    }));
+  };
+
+  const handleChapterChange = (moduleId, chapterId, field, value) => {
+    setModules(
+      modules.map((module) => {
+        if (module.id === moduleId) {
+          return {
+            ...module,
+            chapters: module.chapters.map((chapter) =>
+              chapter.id === chapterId
+                ? { ...chapter, [field]: value }
+                : chapter
+            ),
+          };
+        }
+        return module;
+      })
+    );
+    setChanges((prev) => ({
+      ...prev,
+      [moduleId]: {
+        ...prev[moduleId],
+        chapters: {
+          ...prev[moduleId]?.chapters,
+          [chapterId]: {
+            ...prev[moduleId]?.chapters?.[chapterId],
+            [field]: true,
+          },
+        },
+      },
+    }));
   };
 
   return (
@@ -146,23 +200,23 @@ export const ModulesPopup = ({
             <div className="mt-4">
               <button
                 onClick={() => handleAddChapter(module.id)}
-                disabled={module?.chapters?.length >= maxChapters}
+                disabled={module.chapters.length >= maxChapters}
                 className="text-sm text-blue-500 hover:text-blue-700 disabled:opacity-50"
               >
                 + Add Chapter (Max {maxChapters})
               </button>
 
-              {module.chapters &&
-                module.chapters.map((chapter) => (
-                  <ChaptersPopup
-                    key={chapter._id}
-                    moduleId={module._id}
-                    chapter={chapter}
-                    modules={modules}
-                    isEditMode={isEditMode}
-                    setModules={setModules}
-                  />
-                ))}
+              {module.chapters.map((chapter) => (
+                <ChaptersPopup
+                  key={chapter.id}
+                  moduleId={module.id}
+                  chapter={chapter}
+                  isEditMode={isEditMode}
+                  onChapterChange={(field, value) =>
+                    handleChapterChange(module.id, chapter.id, field, value)
+                  }
+                />
+              ))}
             </div>
           </div>
         ))}

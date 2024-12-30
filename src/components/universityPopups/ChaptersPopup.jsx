@@ -6,16 +6,20 @@ export const ChaptersPopup = ({
   chapter,
   modules,
   setModules,
+  changes,
+  setChanges,
 }) => {
-  const [chapterForm, setChapterForm] = useState({
-    title: "",
-    image: null,
-    readingTime: "",
-    summary: "",
-    pdf: null,
-  });
+   const [chapterForm, setChapterForm] = useState({ ...chapter });
+   const [errors, setErrors] = useState({});
+  // const [chapterForm, setChapterForm] = useState({
+  //   title: "",
+  //   image: null,
+  //   readingTime: "",
+  //   summary: "",
+  //   pdf: null,
+  // });
 
-  const [errors, setErrors] = useState({});
+  // const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setChapterForm({
@@ -27,31 +31,49 @@ export const ChaptersPopup = ({
     });
   }, [chapter]);
 
-  const handleChapterChange = (field, value) => {
-    setChapterForm((prev) => ({ ...prev, [field]: value }));
+ const handleChapterChange = (field, value) => {
+   setChapterForm((prev) => ({ ...prev, [field]: value }));
 
-    if (errors[field]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
-      });
+   if (errors[field]) {
+     setErrors((prev) => {
+       const newErrors = { ...prev };
+       delete newErrors[field];
+       return newErrors;
+     });
+   }
+   
+setModules((prev) =>
+  prev?.map((module) => {
+    if (module.id === moduleId) {
+      return {
+        ...module,
+        chapters: module.chapters.map((ch) =>
+          ch.id === chapter.id ? { ...ch, [field]: value } : ch
+        ),
+      };
     }
+    return module;
+  })
+);
 
-    setModules(
-      modules.map((module) => {
-        if (module.id === moduleId) {
-          return {
-            ...module,
-            chapters: module.chapters.map((ch) =>
-              ch.id === chapter.id ? { ...ch, [field]: value } : ch
-            ),
-          };
-        }
-        return module;
-      })
-    );
-  };
+   setChanges((prev) => ({
+     ...prev,
+     modules: {
+       ...prev.modules,
+       [moduleId]: {
+         ...prev.modules?.[moduleId],
+         chapters: {
+           ...prev.modules?.[moduleId]?.chapters,
+           [chapter.id]: {
+             ...prev.modules?.[moduleId]?.chapters?.[chapter.id],
+             [field]: true,
+           },
+         },
+       },
+     },
+   }));
+ };
+
 
   const handleRemoveChapter = () => {
     if (window.confirm("Are you sure you want to remove this chapter?")) {

@@ -1,22 +1,25 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
-import { UniversityPopup} from '../components/universityPopups/UniversityPopup'
-import { SiAxios } from "react-icons/si";
+import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
 import axios from "axios";
+// import axios from "axios";
 
 const initialUniversities = [
-  { _id:1,
+  {
+    _id: 1,
     name: "Consult",
     img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
     modules: [
-      {  _id:100,
+      {
+        _id: 100,
         name: "consult first modules 1",
         image:
           "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
         chapters: [
-          { _id:1001,
+          {
+            _id: 1001,
             title: "Chapter 1",
             summary: "Desc 1",
             readingTime: "34 min",
@@ -24,7 +27,8 @@ const initialUniversities = [
               "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
             pdf: "example.pdf",
           },
-          { _id:1002,
+          {
+            _id: 1002,
             title: "Chapter 2",
             summary: "Desc 2",
             readingTime: "40 min",
@@ -34,7 +38,8 @@ const initialUniversities = [
           },
         ],
       },
-      { _id:101,
+      {
+        _id: 101,
         name: "consult second modules 1",
         image:
           "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
@@ -51,7 +56,8 @@ const initialUniversities = [
       },
     ],
   },
-  { _id:2,
+  {
+    _id: 2,
     name: "Training",
     img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
     icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
@@ -83,9 +89,8 @@ const initialUniversities = [
   },
 ];
 
-
-//  const BACKEND_URL = "https://pbs-0jan.onrender.com"
- const BACKEND_URL = "https://pbs-1-8vqs.onrender.com"
+//  const BACKEND_URL = "https://pbs-2-steh.onrender.com"
+const BACKEND_URL = "https://pbs-2-steh.onrender.com";
 
 export const University = () => {
   const [universities, setUniversities] = useState(initialUniversities);
@@ -96,17 +101,18 @@ export const University = () => {
   const [deleteUniversityHandle, setDeleteUniversityHandle] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
 
-
   const fetchData = async () =>{
     try {
-      const response = await axios.get(`${BACKEND_URL}/admin/get-university-hierarchy` ,{
-         headers: { 'Content-Type': 'application/json' }} );
-      console.log(response.data,'this is data ----------------')
+      const response = await axios.get(`${BACKEND_URL}/admin/get-university-hierarchy`,
+         {headers: {
+        'Content-Type': 'application/json'},
+      } );
+      console.log(response.data.data,'this is data ----------------')
       setUniversities(response.data);
     } catch (error) {
       console.log(error.message);
     }
-  }  
+  }
   useEffect(()=>{
     fetchData();
   },[])
@@ -116,7 +122,7 @@ export const University = () => {
     setIsOpenPopup(true);
   };
 
-  const handleAddUniversity = () => {        
+  const handleAddUniversity = () => {
     setIsEditMode(false);
     setSelectedUniversity(null);
     setIsOpen(true);
@@ -139,11 +145,30 @@ export const University = () => {
     if (isEditMode) {
       setUniversities(
         universities.map((uni) =>
-          uni.name === updatedUniversity.name ? updatedUniversity : uni
+          uni._id === updatedUniversity.id
+            ? {
+                ...uni,
+                ...updatedUniversity,
+                modules: updatedUniversity.modules.map((module, index) => ({
+                  ...uni.modules[index],
+                  ...module,
+                  chapters: module.chapters.map((chapter, chIndex) => ({
+                    ...uni.modules[index].chapters[chIndex],
+                    ...chapter,
+                  })),
+                })),
+              }
+            : uni
         )
       );
     } else {
-      setUniversities([...universities, updatedUniversity]);
+      setUniversities([
+        ...universities,
+        {
+          ...updatedUniversity,
+          _id: Date.now(), // Generate a temporary ID
+        },
+      ]);
     }
   };
 
@@ -192,7 +217,7 @@ export const University = () => {
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
+              {/* <tbody className="divide-y divide-gray-200 bg-white">
                 {universities.map((university) => {
                   const totalChapters = university.modules.reduce(
                     (acc, module) => {
@@ -252,7 +277,7 @@ export const University = () => {
                     </tr>
                   );
                 })}
-              </tbody>
+              </tbody> */}
             </table>
           </div>
         </div>
