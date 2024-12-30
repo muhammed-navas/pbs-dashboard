@@ -9,7 +9,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 
 
-const BACKEND_URL = "https://pbs-1-8vqs.onrender.com";
+const BACKEND_URL = "https://pbs-2-steh.onrender.com";
 export  const DeleteUniversity = ({
   setDeleteUniversityHandle,
   deleteID,
