@@ -3,7 +3,7 @@ import { ModulesPopup } from "./ModulesPopup";
 import axios from "axios";
 
 
- const BACKEND_URL = "https://pbs-0jan.onrender.com";
+ const BACKEND_URL = "https://pbs-1-8vqs.onrender.com";
 export const UniversityPopup = ({
   setIsOpen,
   isEditMode,

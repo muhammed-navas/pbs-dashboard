@@ -84,7 +84,8 @@ const initialUniversities = [
 ];
 
 
- const BACKEND_URL = "https://pbs-0jan.onrender.com"
+//  const BACKEND_URL = "https://pbs-0jan.onrender.com"
+ const BACKEND_URL = "https://pbs-1-8vqs.onrender.com"
 
 export const University = () => {
   const [universities, setUniversities] = useState(initialUniversities);
@@ -98,7 +99,8 @@ export const University = () => {
 
   const fetchData = async () =>{
     try {
-      const response = await axios.get(`${BACKEND_URL}/admin/get-university-hierarchy`);
+      const response = await axios.get(`${BACKEND_URL}/admin/get-university-hierarchy` ,{
+         headers: { 'Content-Type': 'application/json' }} );
       console.log(response.data,'this is data ----------------')
       setUniversities(response.data);
     } catch (error) {
@@ -114,7 +116,7 @@ export const University = () => {
     setIsOpenPopup(true);
   };
 
-  const handleAddUniversity = () => {
+  const handleAddUniversity = () => {        
     setIsEditMode(false);
     setSelectedUniversity(null);
     setIsOpen(true);
