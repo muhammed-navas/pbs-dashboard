@@ -80,7 +80,7 @@ const filterData = [
     ],
   },
 ];
-const BACKEND_URL = "https://pbs-dashboard.up.railway.app";
+const BACKEND_URL = "https://pbs-production.up.railway.app/";
 
 export const University = () => {
   const [verticals, setVerticals] = useState([]);
@@ -95,11 +95,6 @@ export const University = () => {
     try {
       const response = await axios.get(
         `${BACKEND_URL}/admin/get-university-hierarchy`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
       );
       console.log(response.data)
       // setVerticals(response.data);
