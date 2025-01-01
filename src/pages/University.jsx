@@ -80,7 +80,7 @@ const filterData = [
     ],
   },
 ];
-const BACKEND_URL = "https://pbs-2-steh.onrender.com";
+const BACKEND_URL = "https://pbs-dashboard.up.railway.app";
 
 export const University = () => {
   const [verticals, setVerticals] = useState([]);
@@ -150,7 +150,6 @@ export const University = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          withCredentials: true, 
         }
       );
 
