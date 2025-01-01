@@ -107,15 +107,15 @@ export const University = () => {
          {headers: {
         'Content-Type': 'application/json'},
       } );
-      console.log(response.data.data,'this is data ----------------')
-      setUniversities(response.data);
+      console.log(response.data,'this is data ---');
+      setUniversities(initialUniversities);
     } catch (error) {
       console.log(error.message);
     }
   }
   useEffect(()=>{
     fetchData();
-  },[])
+  },[])   
 
   const handleUniversityClick = (university) => {
     setSelectedUniversity(university);
@@ -217,7 +217,7 @@ export const University = () => {
                   )}
                 </tr>
               </thead>
-              {/* <tbody className="divide-y divide-gray-200 bg-white">
+              <tbody className="divide-y divide-gray-200 bg-white">
                 {universities.map((university) => {
                   const totalChapters = university.modules.reduce(
                     (acc, module) => {
@@ -277,7 +277,7 @@ export const University = () => {
                     </tr>
                   );
                 })}
-              </tbody> */}
+              </tbody>
             </table>
           </div>
         </div>

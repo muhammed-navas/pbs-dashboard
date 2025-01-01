@@ -71,6 +71,7 @@ export const UniversityPopup = ({
         `${BACKEND_URL}/admin/add-university-hierarchy`,
         formDataToSend
       );
+      // setIsOpen(false)
       if (response.status === 200) {
         onUniversityUpdate();
       }
