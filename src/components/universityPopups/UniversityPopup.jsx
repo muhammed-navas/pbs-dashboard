@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ModulesPopup } from "./ModulesPopup";
-import axios from "axios";
 
-const BACKEND_URL = "https://pbs-2-steh.onrender.com";
 export const UniversityPopup = ({
   setIsOpen,
   isEditMode,
-  universityData,
-  onUniversityUpdate,
+  verticalData,
+  onVerticalUpdate,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -18,20 +16,19 @@ export const UniversityPopup = ({
     modules: [],
   });
   const [step, setStep] = useState(1);
-  const [changes, setChanges] = useState({});
 
   useEffect(() => {
-    if (isEditMode && universityData) {
+    if (isEditMode && verticalData) {
       setFormData({
-        name: universityData.name,
+        name: verticalData.name,
         image: null,
         icon: null,
-        imagePreview: universityData.img,
-        iconPreview: universityData.icon,
-        modules: universityData.modules || [],
+        imagePreview: verticalData.img,
+        iconPreview: verticalData.icon,
+        modules: verticalData.modules || [],
       });
     }
-  }, [isEditMode, universityData]);
+  }, [isEditMode, verticalData]);
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -44,11 +41,6 @@ export const UniversityPopup = ({
         [field]: file,
         [previewField]: URL.createObjectURL(file),
       }));
-
-      setChanges((prev) => ({
-        ...prev,
-        [field]: true,
-      }));
     }
   };
 
@@ -58,27 +50,8 @@ export const UniversityPopup = ({
     if (formData.image) formDataToSend.append("image", formData.image);
     if (formData.icon) formDataToSend.append("icon", formData.icon);
     formDataToSend.append("modules", JSON.stringify(formData.modules));
-     for (const [key, value] of formDataToSend.entries()) {
-       console.log(`${key}:`, value,'---------');
-     }
-    try {
-      // Simulating API call
-      // const apiUrl = isEditMode
-      //   ? `${BACKEND_URL}/admin/add-university-hierarchy?id=`
-      //   : `${BACKEND_URL}/admin/add-university-hierarchy`;
-      // const method = isEditMode ? "put" : "post";
-      const response = await axios.post(
-        `${BACKEND_URL}/admin/add-university-hierarchy`,
-        formDataToSend
-      );
-      // setIsOpen(false)
-      if (response.status === 200) {
-        onUniversityUpdate();
-      }
-      setIsOpen(false);
-    } catch (error) {
-      console.error("Error saving university:", error);
-    }
+
+    onVerticalUpdate(formDataToSend);
   };
 
   return (
@@ -104,33 +77,29 @@ export const UniversityPopup = ({
           </svg>
         </button>
 
-        <h2 className="text-xl font-bold font-mono mb-4">
-          {isEditMode ? "Edit University" : "Add University"}
+        <h2 className="text-xl font-bold mb-4">
+          {isEditMode ? "Edit Vertical" : "Add Vertical"}
         </h2>
 
         {step === 1 ? (
           <>
-            <div>
-              <label className="block text-sm/6 font-medium text-gray-900">
-                University Card Name
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Vertical Name
               </label>
-              <div className="mt-2">
-                <div className="flex rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                  <input
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, name: e.target.value }))
-                    }
-                    type="text"
-                    placeholder="Enter university name"
-                    className="block min-w-0 grow px-3 py-1.5 text-base text-gray-900 placeholder:text-xs placeholder:text-gray-300 focus:outline focus:outline-0 sm:text-sm/6"
-                  />
-                </div>
-              </div>
+              <input
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
+                type="text"
+                placeholder="Enter vertical name"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
             </div>
 
-            <div className="my-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
                 Image
               </label>
               <input
@@ -138,12 +107,12 @@ export const UniversityPopup = ({
                 id="image"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
 
-            <div className="my-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
                 Icon
               </label>
               <input
@@ -151,9 +120,10 @@ export const UniversityPopup = ({
                 id="icon"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
+
             {(formData.imagePreview || formData.iconPreview) && (
               <div className="mb-4 flex space-x-4">
                 {formData.imagePreview && (
@@ -180,8 +150,6 @@ export const UniversityPopup = ({
             modules={formData.modules}
             setModulesData={setFormData}
             isEditMode={isEditMode}
-            changes={changes}
-            setChanges={setChanges}
           />
         )}
 

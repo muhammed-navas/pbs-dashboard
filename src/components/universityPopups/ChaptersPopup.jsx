@@ -6,20 +6,9 @@ export const ChaptersPopup = ({
   chapter,
   modules,
   setModules,
-  changes,
-  setChanges,
 }) => {
-   const [chapterForm, setChapterForm] = useState({ ...chapter });
-   const [errors, setErrors] = useState({});
-  // const [chapterForm, setChapterForm] = useState({
-  //   title: "",
-  //   image: null,
-  //   readingTime: "",
-  //   summary: "",
-  //   pdf: null,
-  // });
-
-  // const [errors, setErrors] = useState({});
+  const [chapterForm, setChapterForm] = useState({ ...chapter });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setChapterForm({
@@ -31,49 +20,31 @@ export const ChaptersPopup = ({
     });
   }, [chapter]);
 
- const handleChapterChange = (field, value) => {
-   setChapterForm((prev) => ({ ...prev, [field]: value }));
+  const handleChapterChange = (field, value) => {
+    setChapterForm((prev) => ({ ...prev, [field]: value }));
 
-   if (errors[field]) {
-     setErrors((prev) => {
-       const newErrors = { ...prev };
-       delete newErrors[field];
-       return newErrors;
-     });
-   }
-   
-setModules((prev) =>
-  prev?.map((module) => {
-    if (module.id === moduleId) {
-      return {
-        ...module,
-        chapters: module.chapters.map((ch) =>
-          ch.id === chapter.id ? { ...ch, [field]: value } : ch
-        ),
-      };
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
-    return module;
-  })
-);
 
-   setChanges((prev) => ({
-     ...prev,
-     modules: {
-       ...prev.modules,
-       [moduleId]: {
-         ...prev.modules?.[moduleId],
-         chapters: {
-           ...prev.modules?.[moduleId]?.chapters,
-           [chapter.id]: {
-             ...prev.modules?.[moduleId]?.chapters?.[chapter.id],
-             [field]: true,
-           },
-         },
-       },
-     },
-   }));
- };
-
+    setModules((prev) =>
+      prev.map((module) => {
+        if (module._id === moduleId) {
+          return {
+            ...module,
+            chapters: module.chapters.map((ch) =>
+              ch._id === chapter._id ? { ...ch, [field]: value } : ch
+            ),
+          };
+        }
+        return module;
+      })
+    );
+  };
 
   const handleRemoveChapter = () => {
     if (window.confirm("Are you sure you want to remove this chapter?")) {
@@ -82,9 +53,7 @@ setModules((prev) =>
           if (module._id === moduleId) {
             return {
               ...module,
-              chapters: module?.chapters?.filter(
-                (ch) => ch._id !== chapter._id
-              ),
+              chapters: module.chapters.filter((ch) => ch._id !== chapter._id),
             };
           }
           return module;
@@ -127,7 +96,7 @@ setModules((prev) =>
   return (
     <div className="mt-4 bg-gray-100 p-4 rounded-lg">
       <div className="flex justify-between items-center mb-4">
-        <h4>Chapter {chapter.id}</h4>
+        <h4>Chapter {chapter._id}</h4>
         {!isEditMode && (
           <button onClick={handleRemoveChapter} className="text-gray-500">
             ×

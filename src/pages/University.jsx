@@ -1,180 +1,96 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
 import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
 import axios from "axios";
-// import axios from "axios";
 
-const initialUniversities = [
-  {
-    _id: 1,
-    name: "Consult",
-    img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-    icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
-    modules: [
-      {
-        _id: 100,
-        name: "consult first modules 1",
-        image:
-          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-        chapters: [
-          {
-            _id: 1001,
-            title: "Chapter 1",
-            summary: "Desc 1",
-            readingTime: "34 min",
-            image:
-              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-            pdf: "example.pdf",
-          },
-          {
-            _id: 1002,
-            title: "Chapter 2",
-            summary: "Desc 2",
-            readingTime: "40 min",
-            image:
-              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-            pdf: "example.pdf",
-          },
-        ],
-      },
-      {
-        _id: 101,
-        name: "consult second modules 1",
-        image:
-          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-        chapters: [
-          {
-            title: "Chapter 1",
-            summary: "Desc 1",
-            readingTime: "20 min",
-            image:
-              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-            pdf: "example.pdf",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    _id: 2,
-    name: "Training",
-    img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-    icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
-    modules: [
-      {
-        name: "training first modules 1",
-        image:
-          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-        chapters: [
-          {
-            title: "Chapter 1",
-            summary: "Desc 1",
-            readingTime: "15 min",
-            image:
-              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-            pdf: "example.pdf",
-          },
-          {
-            title: "Chapter 2",
-            summary: "latests chapter",
-            readingTime: "150 min",
-            image:
-              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
-            pdf: "example.pdf",
-          },
-        ],
-      },
-    ],
-  },
-];
-
-//  const BACKEND_URL = "https://pbs-2-steh.onrender.com"
 const BACKEND_URL = "https://pbs-2-steh.onrender.com";
 
 export const University = () => {
-  const [universities, setUniversities] = useState(initialUniversities);
+  const [verticals, setVerticals] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
-  const [selectedUniversity, setSelectedUniversity] = useState(null);
+  const [selectedVertical, setSelectedVertical] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [deleteUniversityHandle, setDeleteUniversityHandle] = useState(false);
+  const [deleteVerticalHandle, setDeleteVerticalHandle] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
 
-  const fetchData = async () =>{
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/admin/get-university-hierarchy`,
-         {headers: {
-        'Content-Type': 'application/json'},
-      } );
-      console.log(response.data,'this is data ---');
-      setUniversities(initialUniversities);
+      const response = await axios.get(
+        `${BACKEND_URL}/admin/get-vertical-hierarchy`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setVerticals(response.data);
     } catch (error) {
-      console.log(error.message);
+      console.error("Error fetching verticals:", error.message);
     }
-  }
-  useEffect(()=>{
-    fetchData();
-  },[])   
+  };
 
-  const handleUniversityClick = (university) => {
-    setSelectedUniversity(university);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleVerticalClick = (vertical) => {
+    setSelectedVertical(vertical);
     setIsOpenPopup(true);
   };
 
-  const handleAddUniversity = () => {
+  const handleAddVertical = () => {
     setIsEditMode(false);
-    setSelectedUniversity(null);
+    setSelectedVertical(null);
     setIsOpen(true);
   };
 
-  const handleEditClick = (e, university) => {
+  const handleEditClick = (e, vertical) => {
     e.stopPropagation();
-    setSelectedUniversity(university);
+    setSelectedVertical(vertical);
     setIsEditMode(true);
     setIsOpen(true);
   };
 
-  const handleDeleteClick = (e, universityName) => {
+  const handleDeleteClick = (e, verticalId) => {
     e.stopPropagation();
-    setDeleteID(universityName);
-    setDeleteUniversityHandle(true);
+    setDeleteID(verticalId);
+    setDeleteVerticalHandle(true);
   };
 
-  const handleUniversityUpdate = (updatedUniversity) => {
-    if (isEditMode) {
-      setUniversities(
-        universities.map((uni) =>
-          uni._id === updatedUniversity.id
-            ? {
-                ...uni,
-                ...updatedUniversity,
-                modules: updatedUniversity.modules.map((module, index) => ({
-                  ...uni.modules[index],
-                  ...module,
-                  chapters: module.chapters.map((chapter, chIndex) => ({
-                    ...uni.modules[index].chapters[chIndex],
-                    ...chapter,
-                  })),
-                })),
-              }
-            : uni
-        )
-      );
-    } else {
-      setUniversities([
-        ...universities,
+  const handleVerticalUpdate = async (updatedVertical) => {
+    for(let [key,value] of updatedVertical.entries()){
+
+      console.log(`${key}:`,value,'&&&&&&&&&&&&&');
+    }
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/admin/add-university-hierarchy`,
+        updatedVertical,
         {
-          ...updatedUniversity,
-          _id: Date.now(), // Generate a temporary ID
-        },
-      ]);
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.status === 200) {
+        fetchData();
+        setIsOpen(false);
+      }
+    } catch (error) {
+      console.error("Error updating vertical:", error);
     }
   };
 
-  const handleDeleteUniversity = (universityName) => {
-    setUniversities(universities.filter((uni) => uni.name !== universityName));
-    setDeleteUniversityHandle(false);
+  const handleDeleteVertical = async (verticalId) => {
+    try {
+      await axios.delete(`${BACKEND_URL}/admin/delete-vertical/${verticalId}`);
+      fetchData();
+      setDeleteVerticalHandle(false);
+    } catch (error) {
+      console.error("Error deleting vertical:", error);
+    }
   };
 
   return (
@@ -183,13 +99,13 @@ export const University = () => {
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold text-gray-900">Vertical</h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all the Vertical including their name, modules, and
+            A list of all the Verticals including their name, modules, and
             chapters.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
-            onClick={handleAddUniversity}
+            onClick={handleAddVertical}
             type="button"
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
@@ -218,8 +134,8 @@ export const University = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {universities.map((university) => {
-                  const totalChapters = university.modules.reduce(
+                {verticals.map((vertical) => {
+                  const totalChapters = vertical.modules.reduce(
                     (acc, module) => {
                       return acc + (module.chapters?.length || 0);
                     },
@@ -227,49 +143,42 @@ export const University = () => {
                   );
                   return (
                     <tr
-                      onClick={() => handleUniversityClick(university)}
+                      onClick={() => handleVerticalClick(vertical)}
                       className="cursor-pointer"
-                      key={university.name}
+                      key={vertical._id}
                     >
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm sm:pl-0">
                         <div className="flex items-center">
-                          <div className="size-8 shrink-0">
+                          <div className="h-8 w-8 flex-shrink-0">
                             <img
                               alt=""
-                              src={university.img}
-                              className="size-8"
+                              src={vertical.img}
+                              className="h-8 w-8 rounded-full"
                             />
                           </div>
                           <div className="ml-4">
                             <div className="font-medium text-gray-900">
-                              {university.name}
+                              {vertical.name}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap px-0 py-5 text-sm text-gray-500">
-                        <div className="mt-1 text-gray-500">
-                          {university.modules.length}
-                        </div>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {vertical.modules.length}
                       </td>
-                      <td className="whitespace-nowrap px-0 py-5 text-sm text-gray-500">
-                        <div className="mt-1 text-gray-500">
-                          {totalChapters}
-                        </div>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {totalChapters}
                       </td>
-                      <td
-                        onClick={(e) => e.stopPropagation()}
-                        className="relative whitespace-nowrap space-x-3 py-5 pr-4 text-sm font-medium sm:pr-0"
-                      >
+                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <button
-                          onClick={(e) => handleEditClick(e, university)}
-                          className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                          onClick={(e) => handleEditClick(e, vertical)}
+                          className="text-indigo-600 hover:text-indigo-900 mr-2"
                         >
                           Edit
                         </button>
                         <button
-                          onClick={(e) => handleDeleteClick(e, university.name)}
-                          className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20"
+                          onClick={(e) => handleDeleteClick(e, vertical._id)}
+                          className="text-red-600 hover:text-red-900"
                         >
                           Delete
                         </button>
@@ -287,26 +196,26 @@ export const University = () => {
         <UniversityPopup
           setIsOpen={setIsOpen}
           isEditMode={isEditMode}
-          universityData={selectedUniversity}
-          onUniversityUpdate={handleUniversityUpdate}
+          verticalData={selectedVertical}
+          onVerticalUpdate={handleVerticalUpdate}
         />
       )}
       {isOpenPopup && (
         <DetailsPopup
           setIsOpenPopup={setIsOpenPopup}
-          university={selectedUniversity}
-          setDeleteUniversityHandle={setDeleteUniversityHandle}
+          vertical={selectedVertical}
+          setDeleteVerticalHandle={setDeleteVerticalHandle}
           setDeleteID={setDeleteID}
           setIsOpen={setIsOpen}
-          setSelectedUniversity={setSelectedUniversity}
+          setSelectedVertical={setSelectedVertical}
         />
       )}
-      {deleteUniversityHandle && (
+      {deleteVerticalHandle && (
         <DeleteUniversity
           deleteID={deleteID}
-          deleteUniversityHandle={deleteUniversityHandle}
-          setDeleteUniversityHandle={setDeleteUniversityHandle}
-          onDelete={handleDeleteUniversity}
+          deleteVerticalHandle={deleteVerticalHandle}
+          setDeleteVerticalHandle={setDeleteVerticalHandle}
+          onDelete={handleDeleteVertical}
         />
       )}
     </div>
