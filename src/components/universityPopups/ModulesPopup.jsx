@@ -17,19 +17,16 @@ export const ModulesPopup = ({
   }, [modules, setModulesData]);
 
   const handleAddModule = () => {
-    if (modules.length < maxModules) {
-      const newModule = {
-        id: Date.now(),
-        name: "",
-        image: null,
-        chapters: [],
-      };
-      setModules([...modules, newModule]);
-      setChanges((prev) => ({
-        ...prev,
-        [newModule.id]: { isNew: true },
-      }));
-    }
+      if (modules.length < maxModules) {
+        const newModule = {
+          id: Date.now(),
+          name: "",
+          image: null,
+          chapters: [], // Initialize empty chapters array
+        };
+        setModules([...modules, newModule]);
+      }
+      
   };
 
   const handleRemoveModule = (moduleId) => {
@@ -57,25 +54,26 @@ export const ModulesPopup = ({
   };
 
   const handleAddChapter = (moduleId) => {
-    setModules(
-      modules.map((module) => {
-        if (module.id === moduleId && module.chapters.length < maxChapters) {
-          const newChapter = {
-            id: Date.now(),
-            title: "",
-            image: null,
-            pdf: null,
-            readingTime: "",
-            summary: "",
-          };
-          return {
-            ...module,
-            chapters: [...module.chapters, newChapter],
-          };
-        }
-        return module;
-      })
-    );
+   setModules(
+     modules.map((module) => {
+       if (module.id === moduleId && module.chapters.length < maxChapters) {
+         const newChapter = {
+           _id: Date.now(), // Changed from id to _id to match the expected format
+           title: "",
+           image: null,
+           pdf: null,
+           readingTime: "",
+           summary: "",
+         };
+         return {
+           ...module,
+           chapters: [...(module.chapters || []), newChapter],
+         };
+       }
+       return module;
+     })
+   );
+
     setChanges((prev) => ({
       ...prev,
       [moduleId]: {
@@ -118,6 +116,7 @@ export const ModulesPopup = ({
       },
     }));
   };
+  console.log(modules, "modules*****");
 
   return (
     <div className="rounded-lg p-2 w-full h-[25rem] overflow-y-scroll">
@@ -212,6 +211,7 @@ export const ModulesPopup = ({
                   moduleId={module.id}
                   chapter={chapter}
                   isEditMode={isEditMode}
+                  setModules={setModules}
                   onChapterChange={(field, value) =>
                     handleChapterChange(module.id, chapter.id, field, value)
                   }

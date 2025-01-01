@@ -3,7 +3,83 @@ import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
 import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
 import axios from "axios";
-
+const filterData = [
+  {
+    name: "Consult",
+    img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+    icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
+    modules: [
+      {
+        name: "consult first modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        chapter: [
+          {
+            title: "Chapter 1",
+            summary: "Desc 1",
+            readingTime: "34 min",
+            image:
+              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            pdf: "example.pdf",
+          },
+          {
+            title: "Chapter 2",
+            summary: "Desc 2",
+            readingTime: "40 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            pdf: "example.pdf",
+          },
+        ],
+      },
+      {
+        name: "consult second modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        chapter: [
+          {
+            title: "Chapter 1",
+            summary: "Desc 1",
+            readingTime: "20 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            pdf: "example.pdf",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Training",
+    img: "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+    icon: "https://cdn-icons-png.flaticon.com/128/1763/1763477.png",
+    modules: [
+      {
+        name: "training first modules 1",
+        image:
+          "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+        chapter: [
+          {
+            title: "Chapter 1",
+            summary: "Desc 1",
+            readingTime: "15 min",
+            image:
+              "https://image.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            pdf: "example.pdf",
+          },
+          {
+            title: "Chapter 2",
+            summary: "latests chapter",
+            readingTime: "150 min",
+            image:
+              "https://img.freepik.com/free-vector/beautiful-green-landscape-background_1048-2991.jpg?uid=R118499020&ga=GA1.1.772838853.1731927176&semt=ais_hybrid",
+            pdf: "example.pdf",
+          },
+        ],
+      },
+    ],
+  },
+];
 const BACKEND_URL = "https://pbs-2-steh.onrender.com";
 
 export const University = () => {
@@ -18,14 +94,16 @@ export const University = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${BACKEND_URL}/admin/get-vertical-hierarchy`,
+        `${BACKEND_URL}/admin/get-university-hierarchy`,
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      setVerticals(response.data);
+      console.log(response.data)
+      // setVerticals(response.data);
+      setVerticals(filterData);
     } catch (error) {
       console.error("Error fetching verticals:", error.message);
     }
@@ -72,13 +150,17 @@ export const University = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true, 
         }
       );
+
+
       if (response.status === 200) {
         fetchData();
         setIsOpen(false);
       }
     } catch (error) {
+      console.log(error.message)
       console.error("Error updating vertical:", error);
     }
   };
@@ -134,7 +216,7 @@ export const University = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {verticals.map((vertical) => {
+                {verticals?.map((vertical,i) => {
                   const totalChapters = vertical.modules.reduce(
                     (acc, module) => {
                       return acc + (module.chapters?.length || 0);
@@ -145,7 +227,7 @@ export const University = () => {
                     <tr
                       onClick={() => handleVerticalClick(vertical)}
                       className="cursor-pointer"
-                      key={vertical._id}
+                      key={i}
                     >
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm sm:pl-0">
                         <div className="flex items-center">

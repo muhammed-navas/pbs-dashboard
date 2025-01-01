@@ -9,6 +9,7 @@ export const ChaptersPopup = ({
 }) => {
   const [chapterForm, setChapterForm] = useState({ ...chapter });
   const [errors, setErrors] = useState({});
+  console.log(moduleId, "moduleId%%%%%%%%%");
 
   useEffect(() => {
     setChapterForm({
@@ -31,19 +32,31 @@ export const ChaptersPopup = ({
       });
     }
 
-    setModules((prev) =>
-      prev.map((module) => {
-        if (module._id === moduleId) {
-          return {
-            ...module,
-            chapters: module.chapters.map((ch) =>
-              ch._id === chapter._id ? { ...ch, [field]: value } : ch
-            ),
-          };
-        }
-        return module;
-      })
-    );
+  setModules((prevModules) =>
+    prevModules.map((module) => {
+      if (module.id === moduleId) {
+        // Changed from _id to id
+        const updatedChapters = module.chapters.map((ch) => {
+          if (ch._id === chapter._id) {
+            return {
+              ...ch,
+              [field]: value,
+            };
+          }
+          return ch;
+        });
+
+        return {
+          ...module,
+          chapters: updatedChapters,
+        };
+      }
+      return module;
+    })
+  );
+
+
+
   };
 
   const handleRemoveChapter = () => {
@@ -110,6 +123,7 @@ export const ChaptersPopup = ({
           <input
             type="text"
             value={chapterForm.title}
+            name="title"
             onChange={(e) => handleChapterChange("title", e.target.value)}
             className="w-full px-3 py-2 border rounded"
             placeholder="Enter chapter title"
