@@ -80,7 +80,7 @@ const filterData = [
     ],
   },
 ];
-const BACKEND_URL = "https://pbs-production.up.railway.app/";
+const BACKEND_URL = "https://pbs-production.up.railway.app";
 
 export const University = () => {
   const [verticals, setVerticals] = useState([]);
