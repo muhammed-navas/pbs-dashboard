@@ -143,23 +143,14 @@ export const University = () => {
          if (!BACKEND_URL) {
            throw new Error("Backend URL is not defined");
          }
-      // const response = await axios.post(`${BACKEND_URL}/admin/add-university-hierarchy`,
-      //   updatedVertical,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
-
-        const response = await axios({
-          method: "post",
-          url: `${BACKEND_URL}/admin/add-university-hierarchy`,
-          data: updatedVertical,
+      const response = await axios.post(`${BACKEND_URL}/admin/add-university-hierarchy`,
+        updatedVertical,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        });
+        }
+      );
 
 
       if (response.status === 200) {
