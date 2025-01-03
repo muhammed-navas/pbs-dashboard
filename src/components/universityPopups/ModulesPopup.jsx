@@ -142,7 +142,7 @@ export const ModulesPopup = ({
                   type="text"
                   value={module.name}
                   onChange={(e) =>
-                    handleModuleChange(module.id, "name", e.target.value)
+                    handleModuleChange(module.id, "moduleName", e.target.value)
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   placeholder="Enter module name"
@@ -157,7 +157,7 @@ export const ModulesPopup = ({
                   type="file"
                   accept="image/*"
                   onChange={(e) =>
-                    handleModuleChange(module.id, "image", e.target.files[0])
+                    handleModuleChange(module.id, "moduleImage", e.target.files[0])
                   }
                   className="w-full px-3 py-1.5 border border-gray-300 rounded-md"
                 />

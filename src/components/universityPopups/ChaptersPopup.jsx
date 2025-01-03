@@ -123,8 +123,8 @@ export const ChaptersPopup = ({
           <input
             type="text"
             value={chapterForm.title}
-            name="title"
-            onChange={(e) => handleChapterChange("title", e.target.value)}
+            name="chapterName"
+            onChange={(e) => handleChapterChange("chapterName", e.target.value)}
             className="w-full px-3 py-2 border rounded"
             placeholder="Enter chapter title"
           />
@@ -136,7 +136,7 @@ export const ChaptersPopup = ({
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleFileChange(e, "image")}
+            onChange={(e) => handleFileChange(e, "ChapterImage")}
             className="w-full px-3 py-2 border rounded"
           />
           {errors.image && <p className="text-red-500">{errors.image}</p>}
