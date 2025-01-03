@@ -20,9 +20,9 @@ export const ModulesPopup = ({
       if (modules.length < maxModules) {
         const newModule = {
           id: Date.now(),
-          name: "",
-          image: null,
-          chapters: [], // Initialize empty chapters array
+          moduleName: "",
+          moduleImage: null,
+          chapters: [], 
         };
         setModules([...modules, newModule]);
       }

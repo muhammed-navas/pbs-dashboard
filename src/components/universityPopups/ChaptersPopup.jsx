@@ -13,8 +13,8 @@ export const ChaptersPopup = ({
 
   useEffect(() => {
     setChapterForm({
-      title: chapter.title || "",
-      image: chapter.image || null,
+      chapterName: chapter.title || "",
+      chapterImage: chapter.image || null,
       readingTime: chapter.readingTime || "",
       summary: chapter.summary || "",
       pdf: chapter.pdf || null,
