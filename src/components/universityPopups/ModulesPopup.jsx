@@ -58,9 +58,9 @@ export const ModulesPopup = ({
      modules.map((module) => {
        if (module.id === moduleId && module.chapters.length < maxChapters) {
          const newChapter = {
-           _id: Date.now(), // Changed from id to _id to match the expected format
-           title: "",
-           image: null,
+           _id: Date.now(), 
+           chapterName: "",
+           chapterImage: null,
            pdf: null,
            readingTime: "",
            summary: "",
