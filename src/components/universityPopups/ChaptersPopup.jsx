@@ -9,7 +9,7 @@ export const ChaptersPopup = ({
 }) => {
   const [chapterForm, setChapterForm] = useState({ ...chapter });
   const [errors, setErrors] = useState({});
-  console.log(moduleId, "moduleId%%%%%%%%%");
+  // console.log(moduleId, "moduleId%%%%%%%%%");
 
   useEffect(() => {
     setChapterForm({

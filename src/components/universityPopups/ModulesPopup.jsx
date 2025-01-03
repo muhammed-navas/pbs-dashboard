@@ -116,7 +116,7 @@ export const ModulesPopup = ({
       },
     }));
   };
-  console.log(modules, "modules*****");
+  // console.log(modules, "modules*****");
 
   return (
     <div className="rounded-lg p-2 w-full h-[25rem] overflow-y-scroll">

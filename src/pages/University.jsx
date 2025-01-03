@@ -94,6 +94,8 @@ export const University = () => {
   const [deleteVerticalHandle, setDeleteVerticalHandle] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
 
+
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -135,10 +137,36 @@ export const University = () => {
     setDeleteVerticalHandle(true);
   };
 
+  const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+  const MAX_PDF_SIZE = 10 * 1024 * 1024;
+const validateFile = (file, maxSize, allowedTypes) => {
+  if (!file) return null;
+
+  if (file.size > maxSize) {
+    throw new Error(
+      `File size should be less than ${maxSize / (1024 * 1024)}MB`
+    );
+  }
+
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error(`File type ${file.type} is not supported`);
+  }
+
+  return file;
+};
+
   const handleVerticalUpdate = async (updatedVertical) => {
-    for(let [key,value] of updatedVertical.entries()){
-      console.log(`${key}:`,value,'&&&&&&&&&&&&&');
-    }
+    // for(let [key,value] of updatedVertical.entries()){
+    //   console.log(`${key}:`,value,'&&&&&&&&&&&&&');
+    // }
+     const imageFile = formData.get("image");
+     const pdfFile = formData.get("pdf");
+     if (imageFile) {
+       validateFile(imageFile, MAX_IMAGE_SIZE, ["image/*"]);
+     }
+     if (pdfFile) {
+       validateFile(pdfFile, MAX_PDF_SIZE, ["application/pdf"]);
+     }
     try {
         if (!updatedVertical || !(updatedVertical instanceof FormData)) {
           throw new Error("Invalid form data");
@@ -146,7 +174,10 @@ export const University = () => {
          if (!BACKEND_URL) {
            throw new Error("Backend URL is not defined");
          }
-      const response = await axios.post(`${BACKEND_URL}/admin/add-university-hierarchy`,
+
+
+      const response = await axios.post(
+        `${BACKEND_URL}/admin/add-university-hierarchy`,
         updatedVertical,
         {
           headers: {
@@ -155,6 +186,7 @@ export const University = () => {
         }
       );
 
+ console.log("Server response:", response.data);
 
       if (response.status === 200) {
         fetchData();
