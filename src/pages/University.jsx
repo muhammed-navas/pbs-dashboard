@@ -159,8 +159,6 @@ export const University = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          timeout: 1000,
-          validateStatus: (status) => status >= 200 && status < 300,
         });
 
 
