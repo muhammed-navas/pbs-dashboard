@@ -7,8 +7,11 @@ import {
 } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
+import dotenv from 'dotenv'
 
+dotenv.config();
 
+const BACKEND_URL = process.env.URL;
 
 export  const DeleteUniversity = ({
   setDeleteUniversityHandle,
@@ -19,7 +22,7 @@ export  const DeleteUniversity = ({
 
   const deleteTheUniversity = async () => {
     try {
-      await axios.delete(`${process.env.BACKEND_URL}/admin/delete-data`);
+      await axios.delete(`${BACKEND_URL}/admin/delete-data`);
       console.log(deleteID, "delete id ");
       setDeleteUniversityHandle(false);
     } catch (error) {
