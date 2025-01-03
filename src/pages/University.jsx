@@ -159,14 +159,14 @@ const validateFile = (file, maxSize, allowedTypes) => {
     // for(let [key,value] of updatedVertical.entries()){
     //   console.log(`${key}:`,value,'&&&&&&&&&&&&&');
     // }
-     const imageFile = formData.get("image");
-     const pdfFile = formData.get("pdf");
-     if (imageFile) {
-       validateFile(imageFile, MAX_IMAGE_SIZE, ["image/*"]);
-     }
-     if (pdfFile) {
-       validateFile(pdfFile, MAX_PDF_SIZE, ["application/pdf"]);
-     }
+    //  const imageFile = formData.get("image");
+    //  const pdfFile = formData.get("pdf");
+    //  if (imageFile) {
+    //    validateFile(imageFile, MAX_IMAGE_SIZE, ["image/*"]);
+    //  }
+    //  if (pdfFile) {
+    //    validateFile(pdfFile, MAX_PDF_SIZE, ["application/pdf"]);
+    //  }
     try {
         if (!updatedVertical || !(updatedVertical instanceof FormData)) {
           throw new Error("Invalid form data");
