@@ -13,8 +13,8 @@ export const ChaptersPopup = ({
 
   useEffect(() => {
     setChapterForm({
-      chapterName: chapter.title || "",
-      chapterImage: chapter.image || null,
+      chapterName: chapter.chapterName || "",
+      chapterImage: chapter.chapterImage || null,
       readingTime: chapter.readingTime || "",
       summary: chapter.summary || "",
       pdf: chapter.pdf || null,
@@ -87,7 +87,7 @@ export const ChaptersPopup = ({
       return;
     }
 
-    if (field === "image" && !file.type.startsWith("image/")) {
+    if (field === "chapterImage" && !file.type.startsWith("image/")) {
       setErrors((prev) => ({
         ...prev,
         [field]: "Please upload a valid image file",
