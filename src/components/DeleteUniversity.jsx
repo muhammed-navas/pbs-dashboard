@@ -9,7 +9,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 
 
-const BACKEND_URL = import.meta.env.URL;
+const BACKEND_URL = import.meta.env.VITE_URL;
 
 export  const DeleteUniversity = ({
   setDeleteUniversityHandle,

@@ -83,7 +83,7 @@ const filterData = [
   },
 ];
 
-const BACKEND_URL = import.meta.env.URL;
+const BACKEND_URL = import.meta.env.VITE_URL;
 
 export const University = () => {
   const [verticals, setVerticals] = useState([]);
