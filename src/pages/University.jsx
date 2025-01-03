@@ -3,9 +3,7 @@ import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
 import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
 import axios from "axios";
-import dotenv from 'dotenv'
 
-dotenv.config();
 
 const filterData = [
   {
@@ -85,7 +83,7 @@ const filterData = [
   },
 ];
 
-const BACKEND_URL = process.env.URL
+const BACKEND_URL = import.meta.env.URL;
 
 export const University = () => {
   const [verticals, setVerticals] = useState([]);

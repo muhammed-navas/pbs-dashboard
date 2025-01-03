@@ -7,11 +7,9 @@ import {
 } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-import dotenv from 'dotenv'
 
-dotenv.config();
 
-const BACKEND_URL = process.env.URL;
+const BACKEND_URL = import.meta.env.URL;
 
 export  const DeleteUniversity = ({
   setDeleteUniversityHandle,
