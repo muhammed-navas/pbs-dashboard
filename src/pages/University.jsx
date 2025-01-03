@@ -3,6 +3,10 @@ import { DetailsPopup } from "../components/detailsPopup/DetailsPopup";
 import { DeleteUniversity } from "../components/DeleteUniversity";
 import { UniversityPopup } from "../components/universityPopups/UniversityPopup";
 import axios from "axios";
+import dotenv from 'dotenv'
+
+dotenv.config();
+
 const filterData = [
   {
     name: "Consult",
@@ -80,7 +84,7 @@ const filterData = [
     ],
   },
 ];
-const BACKEND_URL = "https://pbs-2-steh.onrender.com";
+
 
 export const University = () => {
   const [verticals, setVerticals] = useState([]);
@@ -94,7 +98,7 @@ export const University = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${BACKEND_URL}/admin/get-university-hierarchy`,
+        `${process.env.BACKEND_URL}/admin/get-university-hierarchy`
       );
       console.log(response.data)
       // setVerticals(response.data);
@@ -140,10 +144,11 @@ export const University = () => {
         if (!updatedVertical || !(updatedVertical instanceof FormData)) {
           throw new Error("Invalid form data");
         }
-         if (!BACKEND_URL) {
+         if (!process.env.BACKEND_URL) {
            throw new Error("Backend URL is not defined");
          }
-      const response = await axios.post(`${BACKEND_URL}/admin/add-university-hierarchy`,
+      const response = await axios.post(
+        `${process.env.BACKEND_URL}/admin/add-university-hierarchy`,
         updatedVertical,
         {
           headers: {
@@ -165,7 +170,9 @@ export const University = () => {
 
   const handleDeleteVertical = async (verticalId) => {
     try {
-      await axios.delete(`${BACKEND_URL}/admin/delete-vertical/${verticalId}`);
+      await axios.delete(
+        `${process.env.BACKEND_URL}/admin/delete-vertical/${verticalId}`
+      );
       fetchData();
       setDeleteVerticalHandle(false);
     } catch (error) {

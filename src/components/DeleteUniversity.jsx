@@ -9,7 +9,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 
 
-const BACKEND_URL = "https://pbs-2-steh.onrender.com";
+
 export  const DeleteUniversity = ({
   setDeleteUniversityHandle,
   deleteID,
@@ -19,7 +19,7 @@ export  const DeleteUniversity = ({
 
   const deleteTheUniversity = async () => {
     try {
-      await axios.delete(`${BACKEND_URL}/admin/delete-data`);
+      await axios.delete(`${process.env.BACKEND_URL}/admin/delete-data`);
       console.log(deleteID, "delete id ");
       setDeleteUniversityHandle(false);
     } catch (error) {
